@@ -5,11 +5,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function Hero() {
-  const images = [
-    "/image 45.jpg",
-    "/image.jpg",
-  ];
-
+  const images = ["/hero-1.jpg", "/hero-2.jpg"];
   const [currentImage, setCurrentImage] = useState(0);
 
   useEffect(() => {
@@ -21,11 +17,9 @@ export default function Hero() {
   }, []);
 
   return (
-    <section
-      id="home"
-      className="relative h-screen overflow-hidden"
-    >
-      {/* Background Images */}
+    <section className="relative h-screen w-full overflow-hidden">
+
+      {/* BACKGROUND */}
       <div className="absolute inset-0">
         {images.map((image, index) => (
           <motion.div
@@ -33,49 +27,74 @@ export default function Hero() {
             className="absolute inset-0"
             animate={{
               opacity: currentImage === index ? 1 : 0,
-              scale: currentImage === index ? 1.08 : 1,
+              scale: currentImage === index ? 1.12 : 1,
             }}
-            transition={{
-              duration: 2,
-              ease: "easeInOut",
-            }}
+            transition={{ duration: 2, ease: "easeInOut" }}
           >
             <Image
               src={image}
               alt=""
               fill
               priority
-              sizes="100vw"
-              className="object-cover object-center"
+              className="object-cover"
             />
           </motion.div>
         ))}
       </div>
 
-      {/* Overlay */}
+      {/* LIGHT CONTROL ONLY (no blur, no panels) */}
       <div className="absolute inset-0 bg-black/45" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-black/30" />
 
-      {/* Content */}
-      <div className="relative z-10 flex h-full items-center justify-center">
-        <div className="mx-auto max-w-6xl px-6 text-center text-white">
+      {/* COMPOSITION FIELD */}
+      <div className="absolute inset-0 z-10">
 
-          <span className="mb-8 block text-sm uppercase tracking-[0.45em] text-white/70">
-            Fortune Hestia
-          </span>
+        <div className="absolute left-6 md:left-20 top-[38%] text-white">
 
-          <h1 className="font-serif text-6xl leading-none md:text-8xl lg:text-[8rem]">
-            Live the
-            <br />
-            Greek Life
-          </h1>
+  <motion.span
+    initial={{ opacity: 0, y: 15 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.7 }}
+    className="block text-sm md:text-base uppercase tracking-[0.5em] text-white/70 mb-6"
+  >
+    Fortune Hestia
+  </motion.span>
 
-          <p className="mx-auto mt-10 max-w-3xl text-lg leading-relaxed text-white/80 md:text-xl">
-            Discover a limited collection of luxury villas nestled within
-            Bangalore's most distinctive Greek-inspired township, where
-            architecture, nature, and modern living come together seamlessly.
-          </p>
+  <motion.h1
+  initial={{ opacity: 0, y: 35 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.9, delay: 0.15 }}
+  className="font-serif text-7xl md:text-[11rem] leading-[0.85] tracking-[-0.02em]"
+>
+  Live the<br />
 
-        </div>
+  <span className="relative inline-block font-[500]">
+    Greek Life
+
+    {/* DIDONE UNDERLINE (hairline aesthetic) */}
+    <motion.span
+      initial={{ scaleX: 0 }}
+      animate={{ scaleX: 1 }}
+      transition={{ duration: 1.2, delay: 0.8, ease: "easeOut" }}
+      className="absolute left-0 -bottom-4 h-[1px] w-full origin-left bg-white/80"
+    />
+  </span>
+</motion.h1>
+
+</div>
+
+        {/* RIGHT TEXT (NO BOX, NO BACKDROP, PURE FLOAT) */}
+        <motion.p
+          initial={{ opacity: 0, x: 80 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="absolute right-6 md:right-20 top-[62%] max-w-md text-right text-lg text-white/80 leading-relaxed"
+        >
+          A limited collection of luxury villas shaped by architectural calm,
+          where form, nature, and modern living converge into a private township
+          experience in Bangalore.
+        </motion.p>
+
       </div>
     </section>
   );
