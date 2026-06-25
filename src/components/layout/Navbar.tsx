@@ -1,7 +1,7 @@
 "use client";
-
 import Image from "next/image";
 import Link from "next/link";
+
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -94,7 +94,7 @@ export default function Navbar() {
               {/* Logo */}
               <Link href="/" className="relative h-10 w-32 md:h-12 md:w-40 flex-shrink-0">
                 <Image
-                  src="/logo.png"
+                  src="/logoo.png"
                   alt="Fortune Group"
                   fill
                   priority

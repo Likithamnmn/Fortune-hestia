@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const quickLinks = [
   { label: "Projects", href: "/#villa-design" },
@@ -19,7 +20,14 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <h3 className="font-serif text-3xl text-white">
-              Fortune Hestia
+              <Image
+                                src="/logoo.png"
+                                alt="Fortune Group"
+                                width={160}
+                                height={48}
+                                priority
+                                className="object-contain object-left"
+                              />
             </h3>
             <p className="mt-4 text-white/60">
               Luxury Villas on Sarjapur Road
