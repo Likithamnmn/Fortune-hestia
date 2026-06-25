@@ -16,6 +16,14 @@ const amenities = [
   { title: "Community Spaces", desc: "Places that bring people together.", image: "/comm.png" },
 ];
 
+function getCardDimensions(width: number): { w: number; h: number } {
+  if (width < 480) return { w: 10, h: 13 };
+  if (width < 640) return { w: 13, h: 17 };
+  if (width < 768) return { w: 15, h: 20 };
+  if (width < 1024) return { w: 18, h: 24 };
+  return { w: 22, h: 28 };
+}
+
 function getResponsiveMultiplier(width: number) {
   if (width < 480) return 0.28;
   if (width < 640) return 0.38;
@@ -25,14 +33,18 @@ function getResponsiveMultiplier(width: number) {
 }
 
 function getHeightMultiplier(width: number) {
-  let idealPx: number;
-  if (width < 480) idealPx = 22 * 16;
-  else if (width < 640) idealPx = 26 * 16;
-  else if (width < 768) idealPx = 28 * 16;
-  else if (width < 1024) idealPx = 34 * 16;
-  else idealPx = 38 * 16;
+  const { h } = getCardDimensions(width);
+  const idealPx = h * 16;
   const available = window.innerHeight * 0.7;
   return available >= idealPx ? 1 : available / idealPx;
+}
+
+function getContainerHeight(width: number): string {
+  if (width < 480) return "18rem";
+  if (width < 640) return "22rem";
+  if (width < 768) return "26rem";
+  if (width < 1024) return "30rem";
+  return "38rem";
 }
 
 function getSlotConfig(totalCards: number, slot: number) {
@@ -70,11 +82,23 @@ export default function Amenities() {
       container.querySelectorAll<HTMLElement>(".fan-card")
     );
     const visibleMap = getVisibleMap();
+
+    const applyCardDimensions = () => {
+      const { w, h } = getCardDimensions(window.innerWidth);
+      cardElements.forEach((card) => {
+        card.style.width = `${w}rem`;
+        card.style.height = `${h}rem`;
+      });
+      if (container) {
+        container.style.height = getContainerHeight(window.innerWidth);
+      }
+    };
+    applyCardDimensions();
+
     const multiplier = getResponsiveMultiplier(window.innerWidth);
     const hMult = getHeightMultiplier(window.innerWidth);
     const config = (slot: number) => getSlotConfig(totalCards, slot);
 
-    // ── Set initial hidden states ─────────────────────────────────────────────
     gsap.set(heading, { opacity: 0, x: 80, filter: "blur(8px)" });
 
     cardElements.forEach((card, cardIndex) => {
@@ -90,7 +114,6 @@ export default function Amenities() {
       }
     });
 
-    // ── Trigger everything when section enters viewport ───────────────────────
     let hoverSetupTimer: NodeJS.Timeout;
 
     const trigger = ScrollTrigger.create({
@@ -98,7 +121,6 @@ export default function Amenities() {
       start: "top 75%",
       once: true,
       onEnter: () => {
-        // Heading: right-to-left fade
         gsap.to(heading, {
           opacity: 1,
           x: 0,
@@ -107,7 +129,6 @@ export default function Amenities() {
           ease: "power3.out",
         });
 
-        // Cards: fan in with stagger
         cardElements.forEach((card, cardIndex) => {
           const slot = visibleMap.get(cardIndex);
           if (slot === undefined) return;
@@ -125,7 +146,6 @@ export default function Amenities() {
           });
         });
 
-        // ── Wire hover after entrance finishes ──────────────────────────────
         const visibleEntries: { el: HTMLElement; slot: number }[] = [];
         cardElements.forEach((el, i) => {
           const slot = visibleMap.get(i);
@@ -211,7 +231,10 @@ export default function Amenities() {
           };
           container.addEventListener("mouseleave", onMouseLeave);
 
-          const onResize = () => updateHoverLayout(activeSlot);
+          const onResize = () => {
+            applyCardDimensions();
+            updateHoverLayout(activeSlot);
+          };
           window.addEventListener("resize", onResize);
 
           (container as any)._hoverCleanup = () => {
@@ -234,20 +257,31 @@ export default function Amenities() {
   }, [getVisibleMap, totalCards]);
 
   return (
-    <section id="amenities" ref={sectionRef} className="bg-[#050505] py-32">
+    <section id="amenities" ref={sectionRef} className="bg-[#FAF7F0] py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
 
         {/* Header */}
         <div className="mb-24 text-center overflow-hidden">
           <h2
             ref={headingRef}
-            className="font-serif text-6xl md:text-8xl lg:text-9xl text-white leading-[1.05] tracking-tight will-change-transform"
+            style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
+            className="text-6xl md:text-8xl lg:text-9xl text-black leading-[1.05] tracking-[-0.03em] will-change-transform"
           >
-            <span className="block font-light italic text-white/85">
+            {/* Line 1 — light italic */}
+            <span
+              className="block font-light italic text-black"
+            >
               Curated for
             </span>
-            <span className="block font-semibold">
-             <span className="text-amber-300">Exceptional</span> Living
+
+            {/* Line 2 — regular weight, no bold */}
+            <span className="block font-normal text-black">
+              <span className="text-amber-400">Exceptional</span>{" "}
+              <span style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif', fontWeight: 300 }}
+                className="text-black/60 text-5xl md:text-6xl lg:text-7xl align-baseline italic"
+              >
+                Living
+              </span>
             </span>
           </h2>
         </div>
@@ -274,14 +308,29 @@ export default function Amenities() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 group-hover:from-black/80 group-hover:via-black/30 transition-all duration-700" />
                 </div>
-                <div className="relative z-10 flex flex-col justify-end h-full p-6">
-                  <span className="mb-3 font-mono text-xs tracking-[0.2em] text-white/25 group-hover:text-white/40 transition-colors duration-500">
+
+                <div className="relative z-10 flex flex-col justify-end h-full p-4 sm:p-6">
+                  {/* Index — JetBrains Mono */}
+                  <span
+                    style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+                    className="mb-3 text-[10px] tracking-[0.25em] text-white/25 group-hover:text-white/50 transition-colors duration-500"
+                  >
                     {String(index + 1).padStart(2, "0")}
                   </span>
-                  <h3 className="font-serif text-xl leading-snug text-white">
+
+                  {/* Title — Cormorant Garamond */}
+                  <h3
+                    style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
+                    className="font-light italic text-xl sm:text-2xl leading-snug text-white"
+                  >
                     {item.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/50 group-hover:text-white/80 transition-colors duration-500">
+
+                  {/* Description — Inter light */}
+                  <p
+                    style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif' }}
+                    className="mt-2 text-xs sm:text-sm font-light leading-relaxed text-white/50 group-hover:text-white/75 transition-colors duration-500"
+                  >
                     {item.desc}
                   </p>
                 </div>

@@ -51,6 +51,10 @@ const blogs = [
 
 type Blog = (typeof blogs)[0];
 
+const fontSerif = '"Cormorant Garamond", "Times New Roman", serif';
+const fontSans = '"Inter", ui-sans-serif, system-ui, sans-serif';
+const fontMono = '"JetBrains Mono", ui-monospace, monospace';
+
 /* ---------------- MODAL ---------------- */
 
 function BlogModal({ blog, onClose }: { blog: Blog; onClose: () => void }) {
@@ -75,24 +79,36 @@ function BlogModal({ blog, onClose }: { blog: Blog; onClose: () => void }) {
           animate={{ y: 0 }}
           exit={{ y: "100%" }}
         >
-          {/* Header */}
+          {/* Modal Header */}
           <div className="flex justify-between px-6 py-4 border-b border-white/10">
-            <div className="flex gap-2 items-center">
-              <span className={`w-2 h-2 rounded-full ${blog.dot}`} />
-              <span className="text-xs uppercase tracking-[0.3em] text-white/40">
+            <div className="flex gap-3 items-center">
+              <span className={`w-1.5 h-1.5 rounded-full ${blog.dot}`} />
+              <span
+                style={{ fontFamily: fontMono }}
+                className="text-[10px] uppercase tracking-[0.3em] text-white/35"
+              >
                 {blog.tag}
               </span>
             </div>
-
             <button onClick={onClose}>
-              <X className="text-white/60" size={16} />
+              <X className="text-white/50" size={15} />
             </button>
           </div>
 
-          {/* Content */}
-          <div className="overflow-y-auto p-6 space-y-6 text-white/70 text-sm leading-7">
-            <h2 className="text-white text-2xl font-serif">{blog.title}</h2>
-            <p>{blog.fullContent}</p>
+          {/* Modal Content */}
+          <div className="overflow-y-auto p-6 sm:p-8 space-y-5">
+            <h2
+              style={{ fontFamily: fontSerif }}
+              className="text-white font-light italic text-2xl sm:text-3xl leading-snug tracking-[-0.02em]"
+            >
+              {blog.title}
+            </h2>
+            <p
+              style={{ fontFamily: fontSans }}
+              className="text-white/55 font-light text-sm leading-7"
+            >
+              {blog.fullContent}
+            </p>
           </div>
         </motion.div>
       </motion.div>
@@ -102,13 +118,7 @@ function BlogModal({ blog, onClose }: { blog: Blog; onClose: () => void }) {
 
 /* ---------------- CARD ---------------- */
 
-function BlogCard({
-  blog,
-  onOpen,
-}: {
-  blog: Blog;
-  onOpen: () => void;
-}) {
+function BlogCard({ blog, onOpen }: { blog: Blog; onOpen: () => void }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
 
@@ -121,7 +131,7 @@ function BlogCard({
       onClick={onOpen}
       className="cursor-pointer group rounded-2xl overflow-hidden border border-white/10 bg-white/[0.03]"
     >
-      {/* IMAGE TOP */}
+      {/* Image */}
       <div className="relative h-52 overflow-hidden">
         <Image
           src={blog.image}
@@ -132,18 +142,55 @@ function BlogCard({
         <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition" />
       </div>
 
-      {/* CONTENT */}
+      {/* Content */}
       <div className="p-6">
-        <div className="flex justify-between text-xs text-white/40 mb-3">
-          <span className="uppercase tracking-widest">{blog.tag}</span>
-          <span>{blog.readTime}</span>
+
+        {/* Tag + read time — mono */}
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center gap-2">
+            <span className={`w-1.5 h-1.5 rounded-full ${blog.dot}`} />
+            <span
+              style={{ fontFamily: fontMono }}
+              className="text-[9px] uppercase tracking-[0.3em] text-white/35"
+            >
+              {blog.tag}
+            </span>
+          </div>
+          <span
+            style={{ fontFamily: fontMono }}
+            className="text-[9px] tracking-[0.2em] text-white/25"
+          >
+            {blog.readTime}
+          </span>
         </div>
 
-        <h3 className="text-white font-serif text-lg group-hover:text-amber-300 transition">
+        {/* Title — Cormorant Garamond */}
+        <h3
+          style={{ fontFamily: fontSerif }}
+          className="font-light italic text-xl leading-snug text-white/90 group-hover:text-amber-300 transition-colors duration-300 tracking-[-0.01em]"
+        >
           {blog.title}
         </h3>
 
-        <p className="text-white/50 text-sm mt-3">{blog.description}</p>
+        {/* Description — Inter light */}
+        <p
+          style={{ fontFamily: fontSans }}
+          className="text-white/45 font-light text-sm mt-3 leading-relaxed"
+        >
+          {blog.description}
+        </p>
+
+        {/* Read more hint */}
+        <div className="mt-5 flex items-center gap-2">
+          <span
+            style={{ fontFamily: fontMono }}
+            className="text-[9px] uppercase tracking-[0.25em] text-white/20 group-hover:text-white/40 transition-colors duration-300"
+          >
+            Read
+          </span>
+          <div className="h-px w-6 bg-white/15 group-hover:w-10 group-hover:bg-amber-400/40 transition-all duration-500" />
+        </div>
+
       </div>
     </motion.div>
   );
@@ -156,24 +203,32 @@ export default function BlogPage() {
 
   return (
     <main className="min-h-screen bg-[#050505] text-white px-6 py-32">
-      {/* HERO */}
+
+      {/* Hero */}
       <div className="text-center mb-16">
-        <h1 className="text-5xl font-serif">
-          Stories of <span className="text-amber-300">Luxury Living</span>
+        <h1
+          style={{ fontFamily: fontSerif }}
+          className="font-light italic text-5xl md:text-6xl lg:text-7xl tracking-[-0.03em] leading-[1.05]"
+        >
+          Stories of{" "}
+          <span className="text-amber-400 not-italic font-normal">Luxury Living</span>
         </h1>
-        <p className="text-white/50 mt-4">
+        <p
+          style={{ fontFamily: fontSans }}
+          className="text-white/40 font-light mt-5 text-base tracking-wide"
+        >
           Architecture, lifestyle, and design philosophy.
         </p>
       </div>
 
-      {/* GRID */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Grid */}
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
         {blogs.map((b) => (
           <BlogCard key={b.id} blog={b} onOpen={() => setActive(b)} />
         ))}
       </div>
 
-      {/* MODAL */}
+      {/* Modal */}
       {active && (
         <BlogModal blog={active} onClose={() => setActive(null)} />
       )}

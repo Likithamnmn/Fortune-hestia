@@ -2,14 +2,12 @@
 
 import Image from "next/image";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
 function TypewriterHeading({
   text,
   start,
-  speed = 35,
+  speed = 75,
 }: {
   text: string;
   start: boolean;
@@ -22,18 +20,12 @@ function TypewriterHeading({
       setDisplayed("");
       return;
     }
-
     let i = 0;
-
     const interval = setInterval(() => {
       setDisplayed(text.slice(0, i + 1));
       i++;
-
-      if (i >= text.length) {
-        clearInterval(interval);
-      }
+      if (i >= text.length) clearInterval(interval);
     }, speed);
-
     return () => clearInterval(interval);
   }, [start, text, speed]);
 
@@ -44,6 +36,7 @@ function TypewriterHeading({
     </>
   );
 }
+
 export default function About() {
   const sectionRef = useRef(null);
 
@@ -57,22 +50,13 @@ export default function About() {
     offset: ["start end", "end start"],
   });
 
-  const imageY = useTransform(
-    scrollYProgress,
-    [0, 1],
-    [-100, 100]
-  );
-
-  const imageScale = useTransform(
-    scrollYProgress,
-    [0, 0.5, 1],
-    [1.08, 1, 1.08]
-  );
+  const imageY = useTransform(scrollYProgress, [0, 1], [-100, 100]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.08]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative bg-black py-20 lg:py-24 overflow-hidden"
+      className="relative bg-[#FAF7F0] py-20 lg:py-24 overflow-hidden"
     >
       {/* Ambient Glow */}
       <div className="absolute inset-0 pointer-events-none">
@@ -85,43 +69,34 @@ export default function About() {
           {/* LEFT */}
           <div>
             <motion.h2
-  initial={{ opacity: 0 }}
-  animate={{
-    opacity: isInView ? 1 : 0,
-  }}
-  transition={{ duration: 0.3 }}
-  className="font-serif italic font-light text-5xl md:text-6xl lg:text-7xl leading-[0.88] tracking-[-0.04em] text-white"
->
-  <TypewriterHeading
-    start={isInView}
-    speed={22}
-    text={`Inspired by Greece.
-Crafted for
-Modern Bangalore.`}
-  />
-</motion.h2>
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isInView ? 1 : 0 }}
+              transition={{ duration: 0.3 }}
+              style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
+              className="italic font-light text-5xl md:text-6xl lg:text-7xl leading-[0.88] tracking-[-0.04em] text-black"
+            >
+              <TypewriterHeading
+                start={isInView}
+                speed={75}
+                text={`Inspired by Greece.\nCrafted for\nModern Bangalore.`}
+              />
+            </motion.h2>
 
             <motion.div
               animate={
                 isInView
-                  ? { width: "6rem", opacity: 1 }
+                  ? { width: "4rem", opacity: 1 }
                   : { width: 0, opacity: 0 }
               }
-              transition={{
-                duration: 0.8,
-                delay: 0.2,
-              }}
-              className="mt-8 h-px bg-white/20"
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="mt-8 h-px bg-black/10"
             />
           </div>
 
           {/* CENTER IMAGE */}
           <div className="relative overflow-hidden">
             <motion.div
-              style={{
-                y: imageY,
-                scale: imageScale,
-              }}
+              style={{ y: imageY, scale: imageScale }}
               className="relative h-[500px] md:h-[620px] lg:h-[720px]"
             >
               <Image
@@ -131,9 +106,6 @@ Modern Bangalore.`}
                 priority
                 className="object-cover"
               />
-
-              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
-              <div className="absolute inset-0 shadow-[inset_0_0_180px_rgba(0,0,0,0.75)]" />
             </motion.div>
           </div>
 
@@ -142,34 +114,22 @@ Modern Bangalore.`}
 
             <motion.p
               initial={{ opacity: 0, y: 30 }}
-              animate={
-                isInView
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 30 }
-              }
-              transition={{
-                duration: 0.8,
-                delay: 0.15,
-              }}
-              className="text-lg md:text-xl leading-relaxed text-white/75 font-normal text-left lg:text-right"
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+              style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif' }}
+              className="text-base md:text-lg leading-relaxed text-gray-400 font-light text-left lg:text-right"
             >
-              Fortune Hestia is more than acollection of villas.
+              Fortune Hestia is more than a collection of villas.
               It is a thoughtfully designed community inspired by
               timeless Greek architecture.
             </motion.p>
 
             <motion.p
               initial={{ opacity: 0, y: 30 }}
-              animate={
-                isInView
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 30 }
-              }
-              transition={{
-                duration: 0.8,
-                delay: 0.3,
-              }}
-              className="mt-6 text-lg md:text-xl leading-relaxed text-white/75 font-normal text-left lg:text-right"
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif' }}
+              className="mt-5 text-base md:text-lg leading-relaxed text-gray-400 font-light text-left lg:text-right"
             >
               Located within a 50-acre township, every detail
               is crafted to create elegance, space, and connection.
@@ -177,35 +137,38 @@ Modern Bangalore.`}
 
             <motion.div
               initial={{ opacity: 0, y: 40 }}
-              animate={
-                isInView
-                  ? { opacity: 1, y: 0 }
-                  : { opacity: 0, y: 40 }
-              }
-              transition={{
-                duration: 0.8,
-                delay: 0.45,
-              }}
-              className="mt-14 border-t border-white/10 pt-8"
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+              transition={{ duration: 0.8, delay: 0.45 }}
+              className="mt-14 border-t border-black/8 pt-8"
             >
               <div className="grid grid-cols-2 gap-8 text-right">
 
                 <div>
-                  <h3 className="font-serif italic text-4xl md:text-5xl text-white">
-                    <span className="text-amber-300">50</span>
+                  <h3
+                    style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
+                    className="italic font-light text-4xl md:text-5xl text-amber-400"
+                  >
+                    50
                   </h3>
-
-                  <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-white/40">
+                  <p
+                    style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+                    className="mt-2 text-[9px] uppercase tracking-[0.4em] text-gray-400 font-normal"
+                  >
                     Acres
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-serif italic text-4xl md:text-5xl text-white">
-                    <span className="text-amber-300">Greek</span>
+                  <h3
+                    style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
+                    className="italic font-light text-4xl md:text-5xl text-amber-400"
+                  >
+                    Greek
                   </h3>
-
-                  <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-white/40">
+                  <p
+                    style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+                    className="mt-2 text-[9px] uppercase tracking-[0.4em] text-gray-400 font-normal"
+                  >
                     Inspired
                   </p>
                 </div>
