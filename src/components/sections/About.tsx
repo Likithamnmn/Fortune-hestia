@@ -1,101 +1,219 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
-export default function About() {
+import { useEffect, useState } from "react";
+
+function TypewriterHeading({
+  text,
+  start,
+  speed = 35,
+}: {
+  text: string;
+  start: boolean;
+  speed?: number;
+}) {
+  const [displayed, setDisplayed] = useState("");
+
+  useEffect(() => {
+    if (!start) {
+      setDisplayed("");
+      return;
+    }
+
+    let i = 0;
+
+    const interval = setInterval(() => {
+      setDisplayed(text.slice(0, i + 1));
+      i++;
+
+      if (i >= text.length) {
+        clearInterval(interval);
+      }
+    }, speed);
+
+    return () => clearInterval(interval);
+  }, [start, text, speed]);
+
   return (
-    <section className="relative bg-black py-32 overflow-hidden">
-      <div className="mx-auto max-w-7xl px-6 lg:px-12">
+    <>
+      {displayed}
+      <span className="animate-pulse">|</span>
+    </>
+  );
+}
+export default function About() {
+  const sectionRef = useRef(null);
 
-        {/* STRICT 3-COLUMN GEOMETRIC GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.2fr_0.8fr] min-h-[900px]">
+  const isInView = useInView(sectionRef, {
+    amount: 0.25,
+    once: false,
+  });
 
-          {/* LEFT — TYPOGRAPHY MODULE (CENTER-ANCHORED VERTICALLY) */}
-          <motion.div
-            initial={{ opacity: 0, x: -60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="flex items-center justify-start h-full"
-          >
-            <div className="max-w-sm text-left">
-              <h2 className="font-serif text-5xl md:text-6xl leading-tight text-white">
-                Inspired by Greece.
-                <br />
-                Crafted for Modern Bangalore.
-              </h2>
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
 
-              <div className="mt-10 h-px w-28 bg-white/20" />
-            </div>
-          </motion.div>
+  const imageY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [-100, 100]
+  );
 
-          {/* CENTER — VISUAL CORE (FULL HEIGHT IMAGE FRAME) */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1 }}
-            className="relative h-full flex items-stretch"
-          >
-            <div className="relative w-full h-[700px] lg:h-[780px] overflow-hidden self-center">
+  const imageScale = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    [1.08, 1, 1.08]
+  );
 
+  return (
+    <section
+      ref={sectionRef}
+      className="relative bg-black py-20 lg:py-24 overflow-hidden"
+    >
+      {/* Ambient Glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute left-1/2 top-1/2 h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.02] blur-[180px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-[1400px] px-4 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.2fr_0.75fr] items-center gap-10 lg:gap-14">
+
+          {/* LEFT */}
+          <div>
+            <motion.h2
+  initial={{ opacity: 0 }}
+  animate={{
+    opacity: isInView ? 1 : 0,
+  }}
+  transition={{ duration: 0.3 }}
+  className="font-serif italic font-light text-5xl md:text-6xl lg:text-7xl leading-[0.88] tracking-[-0.04em] text-white"
+>
+  <TypewriterHeading
+    start={isInView}
+    speed={22}
+    text={`Inspired by Greece.
+Crafted for
+Modern Bangalore.`}
+  />
+</motion.h2>
+
+            <motion.div
+              animate={
+                isInView
+                  ? { width: "6rem", opacity: 1 }
+                  : { width: 0, opacity: 0 }
+              }
+              transition={{
+                duration: 0.8,
+                delay: 0.2,
+              }}
+              className="mt-8 h-px bg-white/20"
+            />
+          </div>
+
+          {/* CENTER IMAGE */}
+          <div className="relative overflow-hidden">
+            <motion.div
+              style={{
+                y: imageY,
+                scale: imageScale,
+              }}
+              className="relative h-[500px] md:h-[620px] lg:h-[720px]"
+            >
               <Image
                 src="/image (6).jpg"
                 alt="Fortune Hestia Architecture"
                 fill
-                className="object-cover"
                 priority
+                className="object-cover"
               />
 
-              {/* dark sandwich framing */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
-              <div className="absolute inset-0 shadow-[inset_0_0_220px_rgba(0,0,0,0.8)]" />
-            </div>
-          </motion.div>
+              <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
+              <div className="absolute inset-0 shadow-[inset_0_0_180px_rgba(0,0,0,0.75)]" />
+            </motion.div>
+          </div>
 
-          {/* RIGHT — BODY MODULE (TOP-ALIGNED SMALL TEXT) */}
-          <motion.div
-            initial={{ opacity: 0, x: 60 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, delay: 0.2 }}
-            className="relative h-full"
-          >
-            {/* TOP ANCHORED CONTENT */}
-            <div className="pt-10 lg:pt-0 text-left lg:text-right max-w-xs ml-auto">
+          {/* RIGHT */}
+          <div className="flex flex-col justify-center">
 
-              <p className="text-lg leading-relaxed text-white/70">
-                Fortune Hestia is more than a collection of villas.
-                It is a thoughtfully designed community inspired by timeless Greek architecture.
-              </p>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={
+                isInView
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 30 }
+              }
+              transition={{
+                duration: 0.8,
+                delay: 0.15,
+              }}
+              className="text-lg md:text-xl leading-relaxed text-white/75 font-normal text-left lg:text-right"
+            >
+              Fortune Hestia is more than acollection of villas.
+              It is a thoughtfully designed community inspired by
+              timeless Greek architecture.
+            </motion.p>
 
-              <p className="mt-6 text-lg leading-relaxed text-white/70">
-                Located within a 50-acre township, every detail is crafted to create elegance, space, and connection.
-              </p>
+            <motion.p
+              initial={{ opacity: 0, y: 30 }}
+              animate={
+                isInView
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 30 }
+              }
+              transition={{
+                duration: 0.8,
+                delay: 0.3,
+              }}
+              className="mt-6 text-lg md:text-xl leading-relaxed text-white/75 font-normal text-left lg:text-right"
+            >
+              Located within a 50-acre township, every detail
+              is crafted to create elegance, space, and connection.
+            </motion.p>
 
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={
+                isInView
+                  ? { opacity: 1, y: 0 }
+                  : { opacity: 0, y: 40 }
+              }
+              transition={{
+                duration: 0.8,
+                delay: 0.45,
+              }}
+              className="mt-14 border-t border-white/10 pt-8"
+            >
+              <div className="grid grid-cols-2 gap-8 text-right">
 
-            {/* BOTTOM MACRO WHITESPACE */}
-            <div className="absolute bottom-0 right-0 max-w-xs text-right border-t border-white/10 pt-10">
-              <div className="grid grid-cols-2 gap-8">
                 <div>
-                  <h3 className="font-serif text-4xl text-white">50</h3>
-                  <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/50">
+                  <h3 className="font-serif italic text-4xl md:text-5xl text-white">
+                    <span className="text-amber-300">50</span>
+                  </h3>
+
+                  <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-white/40">
                     Acres
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-serif text-4xl text-white">Greek</h3>
-                  <p className="mt-2 text-xs uppercase tracking-[0.25em] text-white/50">
+                  <h3 className="font-serif italic text-4xl md:text-5xl text-white">
+                    <span className="text-amber-300">Greek</span>
+                  </h3>
+
+                  <p className="mt-2 text-[10px] uppercase tracking-[0.35em] text-white/40">
                     Inspired
                   </p>
                 </div>
-              </div>
-            </div>
 
-          </motion.div>
+              </div>
+            </motion.div>
+
+          </div>
 
         </div>
       </div>

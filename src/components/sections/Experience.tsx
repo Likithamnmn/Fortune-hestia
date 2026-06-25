@@ -3,6 +3,13 @@
 import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { Cormorant_Garamond } from "next/font/google";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  style: ["normal", "italic"],
+});
 
 const stories = [
   {
@@ -54,7 +61,7 @@ export default function Experience() {
           {stories.map((story, index) => (
             <div
               key={index}
-              className="relative flex h-[80vh] w-screen items-center overflow-hidden"
+              className="relative flex h-[100vh] w-screen items-center overflow-hidden"
             >
 
               {/* IMAGE */}
@@ -75,14 +82,14 @@ export default function Experience() {
               <div className="relative z-10 mx-auto max-w-6xl px-8 text-white">
 
                 <span className="mb-6 block text-sm uppercase tracking-[0.4em] text-white/60">
-                  Experience Hestia
+                 <span className="text-amber-300">Experience Hestia</span> 
                 </span>
 
                 <motion.h2
                   initial={{ opacity: 0, y: 60 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8 }}
-                  className="font-serif text-6xl md:text-7xl lg:text-[8rem]"
+                  className={`${cormorant.className} italic font-light text-6xl md:text-7xl lg:text-[8rem] leading-[0.88] tracking-[-0.04em] text-white`}
                 >
                   {story.title}
                 </motion.h2>

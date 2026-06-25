@@ -1,143 +1,182 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 const stories = [
   {
     title: "Elegant Greek-Inspired Facades",
     description:
-      "Elegant Greek-inspired facades create a distinctive visual identity.",
+      "Graceful colonnades, balanced proportions, and timeless detailing establish a distinctive architectural identity.",
     image: "/greek.jpg",
   },
   {
     title: "Openness & Harmony",
     description:
-      "Wide streets and symmetrical planning promote openness and harmony.",
+      "Wide streets and symmetrical planning encourage openness, movement, and harmony throughout the community.",
     image: "/open.jpg",
   },
   {
     title: "Refined Luxury",
     description:
-      "Natural materials and refined detailing enhance everyday luxury.",
+      "Natural materials and meticulous craftsmanship elevate everyday living with understated sophistication.",
     image: "/refined (2).jpg",
   },
   {
     title: "Living Close To Nature",
     description:
-      "Landscaped surroundings reinforce the Greek philosophy of living close to nature.",
+      "Landscaped surroundings reinforce the Greek philosophy of living in balance with nature.",
     image: "/closenature.jpg",
   },
 ];
 
 export default function GreekArchitecture() {
   const [active, setActive] = useState(0);
+  const sectionRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "40% start"],
+  });
+
+  const headingOpacity = useTransform(scrollYProgress, [0, 0.15, 0.5], [1, 1, 0]);
+  const headingY = useTransform(scrollYProgress, [0, 0.5], [0, -80]);
+  const headingScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
 
   useEffect(() => {
-    const sections = document.querySelectorAll(".story-section");
+    // Only run scroll-spy on desktop (≥ 1024px)
+    if (window.innerWidth < 1024) return;
 
+    const sections = document.querySelectorAll(".story-section");
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            const index = Number(
-              entry.target.getAttribute("data-index")
-            );
-
+            const index = Number(entry.target.getAttribute("data-index"));
             setActive(index);
           }
         });
       },
-      {
-        threshold: 0.5,
-      }
+      { threshold: 0.55 }
     );
-
     sections.forEach((section) => observer.observe(section));
-
     return () => observer.disconnect();
   }, []);
 
   return (
-    <section
-      id="architecture"
-      className="bg-black py-32"
-    >
-      <div className="mx-auto max-w-7xl px-6 lg:px-12">
+    <section id="architecture" ref={sectionRef} className="bg-black py-32">
+      <div className="mx-auto max-w-[1600px] px-6 md:px-8">
 
-        <div className="mb-24 text-center">
-          <span className="text-sm uppercase tracking-[0.4em] text-white/50">
+        {/* ── Heading (desktop: sticky + animated, mobile: static) ── */}
+        <motion.div
+          style={{
+            opacity: headingOpacity,
+            y: headingY,
+            scale: headingScale,
+          }}
+          className="sticky top-12 z-20 mb-16 md:mb-24 text-center"
+        >
+          <span className="text-xs uppercase tracking-[0.6em] text-white/40">
             Greek Architecture
           </span>
-
-          <h2 className="mt-6 font-serif text-5xl text-white md:text-7xl">
-            Architecture Inspired
+          <h2 className="mt-6 font-serif text-[2.8rem] leading-[0.9] tracking-[-0.05em] text-white md:text-[5rem] lg:text-[7rem]">
+            <span className="text-amber-300">Greek Architecture.</span>
             <br />
-            by Timeless Beauty
+            Reimagined.
           </h2>
+        </motion.div>
+
+        {/* ── MOBILE / TABLET layout (< 1024px): vertical cards, image on top ── */}
+        <div className="block lg:hidden space-y-16">
+          {stories.map((story, index) => (
+            <div key={index} className="flex flex-col gap-6">
+              {/* Image on top */}
+              <div className="relative w-full h-64 md:h-80 overflow-hidden rounded-sm">
+                <Image
+                  src={story.image}
+                  alt={story.title}
+                  fill
+                  priority={index === 0}
+                  sizes="100vw"
+                  className="object-cover"
+                />
+              </div>
+
+              {/* Content below */}
+              <div className="px-1">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="h-px w-12 bg-white/20" />
+                  <span className="text-xs uppercase tracking-[0.5em] text-white/40">
+                    0{index + 1}
+                  </span>
+                </div>
+                <h3 className="font-serif text-3xl md:text-4xl leading-[0.95] tracking-[-0.04em] text-white">
+                  {story.title}
+                </h3>
+                <p className="mt-5 text-base leading-[1.9] text-white/60">
+                  {story.description}
+                </p>
+              </div>
+            </div>
+          ))}
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-20">
-
+        {/* ── DESKTOP layout (≥ 1024px): sticky image left, scrolling text right ── */}
+        <div className="hidden lg:grid gap-16 lg:grid-cols-[1.45fr_0.55fr]">
           {/* Sticky Image */}
-          <div className="hidden lg:block">
+          <div>
             <div className="sticky top-24">
-
-              <div className="relative h-[700px] overflow-hidden rounded-2xl">
-
+              <div className="relative h-[850px] overflow-hidden">
                 {stories.map((story, index) => (
-                  <div
+                  <motion.div
                     key={index}
-                    className={`absolute inset-0 transition-all duration-1000 ${
-                      active === index
-                        ? "opacity-100 scale-100"
-                        : "opacity-0 scale-105"
-                    }`}
+                    animate={{
+                      opacity: active === index ? 1 : 0,
+                      scale: active === index ? 1 : 1.05,
+                    }}
+                    transition={{ duration: 0.9, ease: "easeInOut" }}
+                    className="absolute inset-0"
                   >
                     <Image
                       src={story.image}
                       alt={story.title}
                       fill
-                      sizes="50vw"
+                      priority={index === 0}
+                      sizes="65vw"
                       className="object-cover"
                     />
-                  </div>
+                  </motion.div>
                 ))}
-
               </div>
-
             </div>
           </div>
 
-          {/* Stories */}
+          {/* Scrolling Content */}
           <div>
-
             {stories.map((story, index) => (
-              <div
+              <section
                 key={index}
                 data-index={index}
-                className="story-section flex min-h-screen items-center"
+                className="story-section flex min-h-[85vh] items-center"
               >
                 <div>
-
-                  <span className="text-sm uppercase tracking-[0.35em] text-white/40">
-                    0{index + 1}
-                  </span>
-
-                  <h3 className="mt-4 font-serif text-4xl text-white md:text-6xl">
+                  <div className="flex items-center gap-4">
+                    <div className="h-px w-16 bg-white/20" />
+                    <span className="text-xs uppercase tracking-[0.5em] text-white/40">
+                      0{index + 1}
+                    </span>
+                  </div>
+                  <h3 className="mt-8 font-serif text-5xl leading-[0.95] tracking-[-0.04em] text-white md:text-7xl">
                     {story.title}
                   </h3>
-
-                  <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/70">
+                  <p className="mt-8 max-w-md text-lg leading-[2] text-white/60">
                     {story.description}
                   </p>
-
                 </div>
-              </div>
+              </section>
             ))}
-
           </div>
-
         </div>
 
       </div>

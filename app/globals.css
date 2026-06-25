@@ -71,3 +71,14 @@ h4,
 .animate-\[shine_3s_linear_infinite\] {
   animation: shine 3s linear infinite;
 }
+
+.luxury-clip {
+  clip-path: polygon(
+    0 0,
+    90% 0,
+    100% 22%,
+    100% 100%,
+    10% 100%,
+    0 78%
+  );
+}
