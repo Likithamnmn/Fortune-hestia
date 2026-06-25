@@ -1,45 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const amenities = [
-  {
-    title: "Clubhouse",
-    desc: "A social hub for recreation and connection.",
-    image: "/clubhouse.jpeg",
-  },
-  {
-    title: "Swimming Pool",
-    desc: "Relax, recharge, and unwind.",
-    image: "/pool.jpeg",
-  },
-  {
-    title: "Landscaped Gardens",
-    desc: "Nature integrated into everyday life.",
-    image: "/garden.jpeg",
-  },
-  {
-    title: "Sports Facilities",
-    desc: "Designed for active lifestyles.",
-    image: "/sports.jpeg",
-  },
-  {
-    title: "Children's Play Area",
-    desc: "Safe spaces for young explorers.",
-    image: "/kids.jpg",
-  },
-  {
-    title: "Community Spaces",
-    desc: "Places that bring people together.",
-    image: "/comm.png",
-  },
+  { title: "Clubhouse", desc: "A social hub for recreation and connection.", image: "/clubhouse.jpeg" },
+  { title: "Swimming Pool", desc: "Relax, recharge, and unwind.", image: "/pool.jpeg" },
+  { title: "Landscaped Gardens", desc: "Nature integrated into everyday life.", image: "/garden.jpeg" },
+  { title: "Sports Facilities", desc: "Designed for active lifestyles.", image: "/sports.jpeg" },
+  { title: "Children's Play Area", desc: "Safe spaces for young explorers.", image: "/kids.jpg" },
+  { title: "Community Spaces", desc: "Places that bring people together.", image: "/comm.png" },
 ];
-
-// ─── Fan layout helpers ───────────────────────────────────────────────────────
-
-const MAX_VISIBLE = 7;
 
 function getResponsiveMultiplier(width: number) {
   if (width < 480) return 0.28;
@@ -57,8 +32,7 @@ function getHeightMultiplier(width: number) {
   else if (width < 1024) idealPx = 34 * 16;
   else idealPx = 38 * 16;
   const available = window.innerHeight * 0.7;
-  if (available >= idealPx) return 1;
-  return available / idealPx;
+  return available >= idealPx ? 1 : available / idealPx;
 }
 
 function getSlotConfig(totalCards: number, slot: number) {
@@ -74,16 +48,12 @@ function getSlotConfig(totalCards: number, slot: number) {
   };
 }
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
 export default function Amenities() {
-  const totalCards = amenities.length;
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isAnimating = useRef(false);
-  const hasEntered = useRef(false);
-  const prevVisible = useRef<Set<number>>(new Set());
+  const totalCards = amenities.length;
 
-  // With 6 cards (< MAX_VISIBLE=7) we never paginate — all cards always visible.
   const getVisibleMap = useCallback(() => {
     const map = new Map<number, number>();
     amenities.forEach((_, i) => map.set(i, i));
@@ -91,207 +61,194 @@ export default function Amenities() {
   }, []);
 
   useEffect(() => {
+    const section = sectionRef.current;
+    const heading = headingRef.current;
     const container = containerRef.current;
-    if (!container) return;
+    if (!section || !heading || !container) return;
 
     const cardElements = Array.from(
       container.querySelectorAll<HTMLElement>(".fan-card")
     );
-    if (!cardElements.length) return;
-
     const visibleMap = getVisibleMap();
-    const previouslyVisible = prevVisible.current;
-    const isFirstMount = !hasEntered.current;
     const multiplier = getResponsiveMultiplier(window.innerWidth);
     const hMult = getHeightMultiplier(window.innerWidth);
     const config = (slot: number) => getSlotConfig(totalCards, slot);
 
-    if (isFirstMount) isAnimating.current = true;
-
-    let completedCount = 0;
-    const visibleCount = visibleMap.size;
-    const onCardDone = () => {
-      if (++completedCount >= visibleCount) {
-        isAnimating.current = false;
-        if (isFirstMount) hasEntered.current = true;
-      }
-    };
+    // ── Set initial hidden states ─────────────────────────────────────────────
+    gsap.set(heading, { opacity: 0, x: 80, filter: "blur(8px)" });
 
     cardElements.forEach((card, cardIndex) => {
       const slot = visibleMap.get(cardIndex);
-      const wasVisible = previouslyVisible.has(cardIndex);
-
       if (slot !== undefined) {
-        const { x, y, rot, scale, zIndex } = config(slot);
-        const target = {
-          x: `${x * multiplier}rem`,
-          y: `${y * hMult}rem`,
-          rotation: rot,
-          scale,
-          opacity: 1,
-          zIndex,
-        };
-
-        if (isFirstMount) {
-          gsap.set(card, {
-            x: 0,
-            y: `${12 * hMult}rem`,
-            rotation: 0,
-            scale: 0.5,
-            opacity: 0,
-          });
-          gsap.to(card, {
-            ...target,
-            duration: 1.2,
-            ease: "elastic.out(1.05,.78)",
-            delay: 0.2 + slot * 0.06,
-            onComplete: onCardDone,
-          });
-        } else if (!wasVisible) {
-          gsap.set(card, {
-            x: `40rem`,
-            y: `${y * hMult}rem`,
-            rotation: 30,
-            scale: 0.5,
-            opacity: 0,
-          });
-          gsap.to(card, {
-            ...target,
-            duration: 0.6,
-            ease: "power2.out",
-            onComplete: onCardDone,
-          });
-        } else {
-          gsap.to(card, {
-            ...target,
-            duration: 0.5,
-            ease: "power2.out",
-            onComplete: onCardDone,
-          });
-        }
+        gsap.set(card, {
+          x: 0,
+          y: `${12 * hMult}rem`,
+          rotation: 0,
+          scale: 0.5,
+          opacity: 0,
+        });
       }
     });
 
-    prevVisible.current = new Set(visibleMap.keys());
+    // ── Trigger everything when section enters viewport ───────────────────────
+    let hoverSetupTimer: NodeJS.Timeout;
 
-    // ── Hover interactions ────────────────────────────────────────────────────
-    const visibleEntries: { el: HTMLElement; slot: number }[] = [];
-    cardElements.forEach((el, i) => {
-      const slot = visibleMap.get(i);
-      if (slot !== undefined) visibleEntries.push({ el, slot });
-    });
-    visibleEntries.sort((a, b) => a.slot - b.slot);
+    const trigger = ScrollTrigger.create({
+      trigger: section,
+      start: "top 75%",
+      once: true,
+      onEnter: () => {
+        // Heading: right-to-left fade
+        gsap.to(heading, {
+          opacity: 1,
+          x: 0,
+          filter: "blur(0px)",
+          duration: 1.1,
+          ease: "power3.out",
+        });
 
-    let activeSlot: number | null = null;
-    let leaveTimer: NodeJS.Timeout | null = null;
-    const centerSlot = visibleEntries.length >> 1;
+        // Cards: fan in with stagger
+        cardElements.forEach((card, cardIndex) => {
+          const slot = visibleMap.get(cardIndex);
+          if (slot === undefined) return;
+          const { x, y, rot, scale, zIndex } = config(slot);
+          gsap.to(card, {
+            x: `${x * multiplier}rem`,
+            y: `${y * hMult}rem`,
+            rotation: rot,
+            scale,
+            opacity: 1,
+            zIndex,
+            duration: 1.2,
+            ease: "elastic.out(1.05,.78)",
+            delay: 0.3 + slot * 0.06,
+          });
+        });
 
-    const updateHoverLayout = (hoveredSlot: number | null) => {
-      const mult = getResponsiveMultiplier(window.innerWidth);
-      const hM = getHeightMultiplier(window.innerWidth);
+        // ── Wire hover after entrance finishes ──────────────────────────────
+        const visibleEntries: { el: HTMLElement; slot: number }[] = [];
+        cardElements.forEach((el, i) => {
+          const slot = visibleMap.get(i);
+          if (slot !== undefined) visibleEntries.push({ el, slot });
+        });
+        visibleEntries.sort((a, b) => a.slot - b.slot);
 
-      visibleEntries.forEach(({ el, slot }) => {
-        const base = config(slot);
-        let targetX = base.x * mult;
-        let targetY = base.y * hM;
-        let targetRot = base.rot;
-        let targetScale = base.scale;
-        let delay = 0;
+        const centerSlot = visibleEntries.length >> 1;
+        let activeSlot: number | null = null;
+        let leaveTimer: NodeJS.Timeout | null = null;
+        const entranceDuration = (0.3 + (totalCards - 1) * 0.06 + 1.2) * 1000;
 
-        if (hoveredSlot !== null) {
-          const distance = Math.abs(slot - hoveredSlot);
-          delay = distance * 0.02;
+        const updateHoverLayout = (hoveredSlot: number | null) => {
+          const mult = getResponsiveMultiplier(window.innerWidth);
+          const hM = getHeightMultiplier(window.innerWidth);
 
-          if (slot === hoveredSlot) {
-            targetY -= 2.5 * hM;
-            targetScale *= 1.08;
-          } else {
-            const normalized =
-              centerSlot > 0 ? (slot - centerSlot) / centerSlot : 0;
-            const pushStrength =
-              8 *
-              (1 - Math.abs(normalized)) *
-              (1 + 0.2 * Math.max(0, 3 - distance));
+          visibleEntries.forEach(({ el, slot }) => {
+            const base = config(slot);
+            let targetX = base.x * mult;
+            let targetY = base.y * hM;
+            let targetRot = base.rot;
+            let targetScale = base.scale;
+            let delay = 0;
 
-            if (slot < hoveredSlot) {
-              targetX -= pushStrength * mult;
-              targetRot -= 3 / (distance + 1);
+            if (hoveredSlot !== null) {
+              const distance = Math.abs(slot - hoveredSlot);
+              delay = distance * 0.02;
+
+              if (slot === hoveredSlot) {
+                targetY -= 2.5 * hM;
+                targetScale *= 1.08;
+              } else {
+                const normalized =
+                  centerSlot > 0 ? (slot - centerSlot) / centerSlot : 0;
+                const pushStrength =
+                  8 *
+                  (1 - Math.abs(normalized)) *
+                  (1 + 0.2 * Math.max(0, 3 - distance));
+
+                if (slot < hoveredSlot) {
+                  targetX -= pushStrength * mult;
+                  targetRot -= 3 / (distance + 1);
+                } else {
+                  targetX += pushStrength * mult;
+                  targetRot += 3 / (distance + 1);
+                }
+
+                if (slot === visibleEntries.length - 1 && hoveredSlot < centerSlot)
+                  targetY -= 1 * hM;
+                if (slot === 0 && hoveredSlot > centerSlot) targetY -= 1 * hM;
+              }
             } else {
-              targetX += pushStrength * mult;
-              targetRot += 3 / (distance + 1);
+              delay = Math.abs(slot - centerSlot) * 0.02;
             }
 
-            if (slot === visibleEntries.length - 1 && hoveredSlot < centerSlot)
-              targetY -= 1 * hM;
-            if (slot === 0 && hoveredSlot > centerSlot) targetY -= 1 * hM;
-          }
-        } else {
-          delay = Math.abs(slot - centerSlot) * 0.02;
-        }
+            gsap.to(el, {
+              x: `${targetX}rem`,
+              y: `${targetY}rem`,
+              rotation: targetRot,
+              scale: targetScale,
+              duration: 0.5,
+              delay,
+              ease: "elastic.out(1,.75)",
+              overwrite: "auto",
+            });
+            gsap.set(el, { zIndex: base.zIndex });
+          });
+        };
 
-        gsap.to(el, {
-          x: `${targetX}rem`,
-          y: `${targetY}rem`,
-          rotation: targetRot,
-          scale: targetScale,
-          duration: 0.5,
-          delay,
-          ease: "elastic.out(1,.75)",
-          overwrite: "auto",
-        });
-        gsap.set(el, { zIndex: base.zIndex });
-      });
-    };
+        hoverSetupTimer = setTimeout(() => {
+          const enterHandlers = visibleEntries.map(({ el, slot }) => {
+            const handler = () => {
+              if (leaveTimer) { clearTimeout(leaveTimer); leaveTimer = null; }
+              if (activeSlot !== slot) { activeSlot = slot; updateHoverLayout(slot); }
+            };
+            el.addEventListener("mouseenter", handler);
+            return { el, handler };
+          });
 
-    const enterHandlers = visibleEntries.map(({ el, slot }) => {
-      const handler = () => {
-        if (isAnimating.current) return;
-        if (leaveTimer) {
-          clearTimeout(leaveTimer);
-          leaveTimer = null;
-        }
-        if (activeSlot !== slot) {
-          activeSlot = slot;
-          updateHoverLayout(slot);
-        }
-      };
-      el.addEventListener("mouseenter", handler);
-      return { el, handler };
+          const onMouseLeave = () => {
+            if (leaveTimer) clearTimeout(leaveTimer);
+            leaveTimer = setTimeout(() => { activeSlot = null; updateHoverLayout(null); }, 50);
+          };
+          container.addEventListener("mouseleave", onMouseLeave);
+
+          const onResize = () => updateHoverLayout(activeSlot);
+          window.addEventListener("resize", onResize);
+
+          (container as any)._hoverCleanup = () => {
+            enterHandlers.forEach(({ el, handler }) =>
+              el.removeEventListener("mouseenter", handler)
+            );
+            container.removeEventListener("mouseleave", onMouseLeave);
+            window.removeEventListener("resize", onResize);
+            if (leaveTimer) clearTimeout(leaveTimer);
+          };
+        }, entranceDuration);
+      },
     });
 
-    const onMouseLeave = () => {
-      if (isAnimating.current) return;
-      if (leaveTimer) clearTimeout(leaveTimer);
-      leaveTimer = setTimeout(() => {
-        activeSlot = null;
-        updateHoverLayout(null);
-      }, 50);
-    };
-    container.addEventListener("mouseleave", onMouseLeave);
-
-    const onResize = () => {
-      if (!isAnimating.current) updateHoverLayout(activeSlot);
-    };
-    window.addEventListener("resize", onResize);
-
     return () => {
-      enterHandlers.forEach(({ el, handler }) =>
-        el.removeEventListener("mouseenter", handler)
-      );
-      container.removeEventListener("mouseleave", onMouseLeave);
-      window.removeEventListener("resize", onResize);
-      if (leaveTimer) clearTimeout(leaveTimer);
+      trigger.kill();
+      clearTimeout(hoverSetupTimer);
+      (container as any)._hoverCleanup?.();
     };
   }, [getVisibleMap, totalCards]);
 
   return (
-    <section className="bg-[#050505] py-32">
+    <section id="amenities" ref={sectionRef} className="bg-[#050505] py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
 
         {/* Header */}
-        <div className="mb-20 text-center">
-          <h2 className="font-serif text-5xl md:text-7xl text-white">
-            Curated for Exceptional Living
+        <div className="mb-24 text-center overflow-hidden">
+          <h2
+            ref={headingRef}
+            className="font-serif text-6xl md:text-8xl lg:text-9xl text-white leading-[1.05] tracking-tight will-change-transform"
+          >
+            <span className="block font-light italic text-white/85">
+              Curated for
+            </span>
+            <span className="block font-semibold">
+             <span className="text-amber-300">Exceptional</span> Living
+            </span>
           </h2>
         </div>
 
@@ -307,32 +264,23 @@ export default function Amenities() {
               className="fan-card group absolute cursor-pointer"
               style={{ width: "22rem", height: "28rem" }}
             >
-              {/* Card shell */}
               <div className="relative w-full h-full overflow-hidden border border-white/10 bg-[#0A0A0A] shadow-[0_8px_40px_rgba(0,0,0,0.6)] transition-colors duration-500 group-hover:border-white/30">
-
-                {/* Background image */}
                 <div className="absolute inset-0">
                   <Image
                     src={item.image}
                     alt={item.title}
                     fill
-                    className="object-cover opacity-0 scale-110 opacity-100 scale-100 transition-all duration-700"
+                    className="object-cover transition-all duration-700"
                   />
-                  {/* Always-present dark scrim — deepens on hover */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 group-hover:from-black/80 group-hover:via-black/30 transition-all duration-700" />
                 </div>
-
-                {/* Content */}
                 <div className="relative z-10 flex flex-col justify-end h-full p-6">
-                  {/* Index number — quiet, typographic accent */}
                   <span className="mb-3 font-mono text-xs tracking-[0.2em] text-white/25 group-hover:text-white/40 transition-colors duration-500">
                     {String(index + 1).padStart(2, "0")}
                   </span>
-
                   <h3 className="font-serif text-xl leading-snug text-white">
                     {item.title}
                   </h3>
-
                   <p className="mt-2 text-sm leading-relaxed text-white/50 group-hover:text-white/80 transition-colors duration-500">
                     {item.desc}
                   </p>

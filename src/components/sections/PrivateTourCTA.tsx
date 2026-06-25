@@ -18,6 +18,7 @@ export default function PrivateTourCTA() {
 
   return (
     <section
+      id="contact"
       ref={ref}
       className="relative h-screen overflow-hidden flex items-center justify-center bg-black"
     >

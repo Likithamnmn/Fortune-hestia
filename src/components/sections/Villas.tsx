@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import React, { useRef } from "react";
-import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
+import { useScroll, useTransform, motion } from "framer-motion";
 
 // ─── ContainerScroll ──────────────────────────────────────────────────────────
 
@@ -38,7 +38,10 @@ const ContainerScroll = ({
       className="h-[60rem] md:h-[80rem] flex items-center justify-center relative p-2 md:p-20"
       ref={containerRef}
     >
-      <div className="py-10 md:py-40 w-full relative" style={{ perspective: "1000px" }}>
+      <div
+        className="py-10 md:py-40 w-full relative"
+        style={{ perspective: "1000px" }}
+      >
         {/* Title */}
         <motion.div
           style={{ translateY: translate }}
@@ -90,16 +93,33 @@ export default function Villas() {
     <section id="villa-design" className="bg-[#050505]">
       <ContainerScroll
         titleComponent={
-          <div className="mb-8 text-center">
-            <span className="text-sm uppercase tracking-[0.4em] text-white/50">
+          <motion.div
+            className="mb-8 text-center"
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: false, amount: 0.6 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+          >
+            <motion.span
+              className="text-sm uppercase tracking-[0.4em] text-white/50"
+              initial={{ opacity: 0, x: 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1.2, ease: "easeOut", delay: 0.1 }}
+            >
               The Villas
-            </span>
-            <h2 className="mt-6 font-serif text-5xl text-white md:text-7xl">
-              Homes Designed
-              <br />
-              Around Life
-            </h2>
-          </div>
+            </motion.span>
+
+           <motion.h2
+  className="mt-6 font-serif italic text-6xl md:text-8xl lg:text-9xl text-white leading-[1.05]"
+  initial={{ opacity: 0, x: -60 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  transition={{ duration: 1.4, ease: "easeOut", delay: 0.2 }}
+>
+  Homes Designed
+  <br />
+  <span className="text-amber-300">Around life</span>
+</motion.h2>
+          </motion.div>
         }
       >
         {/* Villa cards — scrollable inside the 3D card */}
