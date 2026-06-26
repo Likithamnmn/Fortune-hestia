@@ -78,7 +78,7 @@ export default function About() {
               <TypewriterHeading
                 start={isInView}
                 speed={75}
-                text={`Inspired by Greece.\nCrafted for\nModern Bangalore.`}
+                text={` Live in a Limited-Edition Home Crafted for Modern Luxury.`}
               />
             </motion.h2>
 
@@ -119,9 +119,7 @@ export default function About() {
               style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif' }}
               className="text-base md:text-lg leading-relaxed text-gray-400 font-light text-left lg:text-right"
             >
-              Fortune Hestia is more than a collection of villas.
-              It is a thoughtfully designed community inspired by
-              timeless Greek architecture.
+              Discover an elite lifestyle at Fortune Hestia. Our premium gated community offers luxury villas built for privacy and comfort. Enjoy beautiful modern design, open spaces, and excellent clubhouse amenities.
             </motion.p>
 
             <motion.p
@@ -131,50 +129,28 @@ export default function About() {
               style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif' }}
               className="mt-5 text-base md:text-lg leading-relaxed text-gray-400 font-light text-left lg:text-right"
             >
-              Located within a 50-acre township, every detail
-              is crafted to create elegance, space, and connection.
+              Located right on Sarjapur Road, you get easy connectivity to Bengaluru's top IT parks and schools. It is the perfect peaceful home with all the city connections you need.
             </motion.p>
+
+            {/* Download Brochure */}
+            <motion.a
+              href="/brochure.pdf"
+              download="Fortune-Hestia-Brochure.pdf"
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+              transition={{ duration: 0.8, delay: 0.45 }}
+              style={{ fontFamily: '"JetBrains Mono", monospace' }}
+              className="mt-8 self-start lg:self-end inline-flex items-center gap-3 py-4 px-8 border border-black/20 text-black text-[9px] tracking-[0.4em] uppercase hover:bg-black hover:text-white transition-all duration-500"
+            >
+              Download Brochure ↓
+            </motion.a>
 
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-              transition={{ duration: 0.8, delay: 0.45 }}
-              className="mt-14 border-t border-black/8 pt-8"
-            >
-              <div className="grid grid-cols-2 gap-8 text-right">
-
-                <div>
-                  <h3
-                    style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
-                    className="italic font-light text-4xl md:text-5xl text-amber-400"
-                  >
-                    50
-                  </h3>
-                  <p
-                    style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
-                    className="mt-2 text-[9px] uppercase tracking-[0.4em] text-gray-400 font-normal"
-                  >
-                    Acres
-                  </p>
-                </div>
-
-                <div>
-                  <h3
-                    style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
-                    className="italic font-light text-4xl md:text-5xl text-amber-400"
-                  >
-                    Greek
-                  </h3>
-                  <p
-                    style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
-                    className="mt-2 text-[9px] uppercase tracking-[0.4em] text-gray-400 font-normal"
-                  >
-                    Inspired
-                  </p>
-                </div>
-
-              </div>
-            </motion.div>
+              transition={{ duration: 0.8, delay: 0.55 }}
+              className="mt-10 border-t border-black/8 pt-8"
+            />
 
           </div>
 

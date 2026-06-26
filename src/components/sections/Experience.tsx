@@ -23,24 +23,24 @@ const jetbrainsMono = JetBrains_Mono({
 
 const stories = [
   {
-    title: "Morning",
+    title: "Comfort & Style",
     description:
-      "Wake up to tree-lined avenues, fresh air, and peaceful surroundings.",
+      "Experience the perfect blend of comfort and style. Each home offers premium spacious layouts.",
     image: "/image (5).jpg",
   },
   {
-    title: "Family",
-    description: "Large homes designed for moments that matter most.",
+    title: "Natural Light",
+    description: "Modern kitchen designs, and large windows that fill the rooms with natural light. It is an elite space designed to make your daily life feel bright, open, and relaxed.",
     image: "/image (4).jpg",
   },
   {
-    title: "Nature",
-    description: "Beautiful landscapes that become part of everyday life.",
+    title: "Quality Materials",
+    description: "See the fine details, clean finishes, and quality materials in every corner.",
     image: "/image (5).jpg",
   },
   {
-    title: "Community",
-    description: "A vibrant neighborhood where connections grow naturally.",
+    title: "Modern Living",
+    description: "From quiet private bedrooms to elegant dining areas, these homes are built for modern living. Browse the gallery below to see the premium interior quality of our villas.",
     image: "/image (7).jpg",
   },
 ];

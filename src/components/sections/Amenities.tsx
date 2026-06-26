@@ -271,16 +271,16 @@ export default function Amenities() {
             <span
               className="block font-light italic text-black"
             >
-              Curated for
+              Living
             </span>
 
             {/* Line 2 — regular weight, no bold */}
             <span className="block font-normal text-black">
-              <span className="text-amber-400">Exceptional</span>{" "}
+              <span className="text-amber-400">Space</span>{" "}
               <span style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif', fontWeight: 300 }}
                 className="text-black/60 text-5xl md:text-6xl lg:text-7xl align-baseline italic"
               >
-                Living
+                Amenities
               </span>
             </span>
           </h2>

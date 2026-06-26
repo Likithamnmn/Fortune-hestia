@@ -32,6 +32,10 @@ export default function Hero() {
     return () => clearInterval(interval);
   }, []);
 
+  const scrollToPrivateCTA = () => {
+    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section className="relative h-screen w-full overflow-hidden">
 
@@ -61,28 +65,27 @@ export default function Hero() {
       <div className="absolute inset-0 z-10">
 
         {/* ── MOBILE / TABLET (< lg) ── */}
-        <div className="flex flex-col justify-end h-full pb-16 px-6 lg:hidden">
+        <div className="flex flex-col justify-end h-full pb-14 px-6 lg:hidden">
 
-          {/* Eyebrow — Mono */}
+          {/* Eyebrow */}
           <motion.span
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className={`${jetbrainsMono.className} block text-[9px] uppercase tracking-[0.5em] text-white/80 mb-5`}
+            className={`${jetbrainsMono.className} block text-[9px] uppercase tracking-[0.5em] text-white/80 mb-4`}
           >
             Fortune Hestia
           </motion.span>
 
-          {/* Headline — Cormorant */}
+          {/* Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.15 }}
-            className={`${cormorant.className} font-light italic text-[3.5rem] leading-[0.88] tracking-[-0.03em] text-white`}
+            className={`${cormorant.className} font-normal text-[2.4rem] leading-[1] tracking-[-0.02em] text-white`}
           >
-            Live the<br />
-            <span className="relative inline-block not-italic font-normal">
-              <span className="text-amber-400">Greek</span> Life
+            <span className="relative inline-block">
+              Luxury Villas in<br />Sarjapur Road<br />Bangalore
               <motion.span
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
@@ -92,17 +95,27 @@ export default function Hero() {
             </span>
           </motion.h1>
 
-          {/* Body — Inter light */}
+          {/* Body */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
-            className={`${inter.className} font-light mt-6 max-w-sm text-sm text-white/60 leading-relaxed`}
+            className={`${inter.className} font-light mt-5 max-w-sm text-sm text-white/60 leading-relaxed`}
           >
-            A limited collection of luxury villas shaped by architectural calm,
-            where form, nature, and modern living converge into a private township
-            experience in Bangalore.
+            Discover an elite lifestyle at Fortune Hestia. Experience modern design and world-class amenities. Enjoy the privacy of a limited-edition township. All this, located right in Bengaluru's prime tech hub.
           </motion.p>
+
+          {/* CTA Button */}
+          <motion.button
+            type="button"
+            onClick={scrollToPrivateCTA}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 1 }}
+            className={`${jetbrainsMono.className} mt-8 w-full py-4 border border-white/30 text-white text-[9px] tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-500`}
+          >
+            Book a Private Tour
+          </motion.button>
 
         </div>
 
@@ -110,14 +123,14 @@ export default function Hero() {
         <div className="hidden lg:block">
 
           {/* Left — eyebrow + headline */}
-          <div className="absolute left-20 top-[38%] text-white">
+          <div className="absolute left-20 top-[30%] text-white max-w-[55vw]">
 
-            {/* Eyebrow — Mono */}
+            {/* Eyebrow */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7 }}
-              className="flex items-center gap-3 mb-7"
+              className="flex items-center gap-3 mb-6"
             >
               <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.5em] text-white/30`}>
                 Fortune
@@ -128,16 +141,15 @@ export default function Hero() {
               </span>
             </motion.div>
 
-            {/* Headline — Cormorant */}
+            {/* Headline */}
             <motion.h1
               initial={{ opacity: 0, y: 35 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.15 }}
-              className={`${cormorant.className} font-light italic text-[10rem] leading-[0.85] tracking-[-0.03em]`}
+              className={`${cormorant.className} font-normal text-[6.5rem] leading-[0.9] tracking-[-0.03em]`}
             >
-              Live the<br />
-              <span className="relative inline-block not-italic font-normal">
-                <span className="text-amber-400">Greek</span> Life
+              <span className="relative inline-block">
+                Luxury Villas in<br />Sarjapur Road Bangalore
                 <motion.span
                   initial={{ scaleX: 0 }}
                   animate={{ scaleX: 1 }}
@@ -147,6 +159,18 @@ export default function Hero() {
               </span>
             </motion.h1>
 
+            {/* CTA Button */}
+            <motion.button
+              type="button"
+              onClick={scrollToPrivateCTA}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 1 }}
+              className={`${jetbrainsMono.className} mt-12 py-4 px-10 border border-white/30 text-white text-[9px] tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-500`}
+            >
+              Book a Private Tour
+            </motion.button>
+
           </div>
 
           {/* Right — body copy */}
@@ -154,11 +178,9 @@ export default function Hero() {
             initial={{ opacity: 0, x: 80 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
-            className={`${inter.className} font-light absolute right-20 top-[62%] max-w-sm text-right text-base text-white/50 leading-relaxed`}
+            className={`${inter.className} font-light absolute right-20 bottom-[12%] max-w-xs text-right text-sm text-white/50 leading-relaxed`}
           >
-            A limited collection of luxury villas shaped by architectural calm,
-            where form, nature, and modern living converge into a private township
-            experience in Bangalore.
+            Discover an elite lifestyle at Fortune Hestia. Experience modern design and world-class amenities. Enjoy the privacy of a limited-edition township. All this, located right in Bengaluru's prime tech hub.
           </motion.p>
 
         </div>
