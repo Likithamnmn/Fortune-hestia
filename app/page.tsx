@@ -15,6 +15,8 @@ import LifeInsideCosmos from "@/components/sections/LifeInsideCosmos";
 import LocationAdvantage from "@/components/sections/LocationAdvantage";
 import TrustLegacy from "@/components/sections/TrustLegacy";
 import PrivateTourCTA from "@/components/sections/PrivateTourCTA";
+import ProjectHighlights from "@/components/sections/ProjectHighlights";
+import QuickEnquiry from "@/components/sections/QuickEnquiry";
 
 export default function Home() {
   return (
@@ -22,12 +24,13 @@ export default function Home() {
       <Navbar />
       <PageTransition>
         <Hero />
+        <ProjectHighlights />
         <About />
         <Experience />
         <GreekArchitecture />
         <Villas />
-        <LifeInsideCosmos />
         <Amenities />
+        <QuickEnquiry/>
         <LocationAdvantage />
         <PrivateTourCTA />
       </PageTransition>

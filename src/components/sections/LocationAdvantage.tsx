@@ -123,9 +123,8 @@ export default function LocationAdvantage() {
                   transform transition-all duration-[1200ms] ease-[cubic-bezier(0.77,0,0.175,1)]
                   ${visible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
               >
-                <span className="text-amber-400 not-italic font-normal">Connected to</span>
-                <br />
-                Everything That Matters
+                Everything Within 
+                <span className="text-amber-400 not-italic font-normal"> Reach</span>
               </h2>
             </div>
 
@@ -136,8 +135,8 @@ export default function LocationAdvantage() {
                   transform transition-all duration-[1400ms] delay-200 ease-[cubic-bezier(0.77,0,0.175,1)]
                   ${visible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
               >
-                Strategically positioned on Sarjapur Road — where movement, business,
-                and lifestyle converge seamlessly.
+                Thoughtfully located off Sarjapur Road, with seamless access to Bengaluru's IT hubs, schools and daily conveniences.
+* map is perfect but resize this section neately.
               </p>
             </div>
 

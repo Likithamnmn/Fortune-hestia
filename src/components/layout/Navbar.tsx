@@ -8,9 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { name: "Home", href: "/", scrollTo: null },
-  { name: "Villa Design", href: "/#villa-design", scrollTo: "villa-design" },
-  { name: "Floor Plans", href: "/floor-plans", scrollTo: null },
+  { name: "Home", href: "/#Hero", scrollTo: "Hero" },
   { name: "Amenities", href: "/#amenities", scrollTo: "amenities" },
   { name: "Location", href: "/#location", scrollTo: "location" },
   { name: "Blog", href: "/blog", scrollTo: null },
@@ -85,14 +83,14 @@ export default function Navbar() {
         <div
           className={`transition-all duration-700 ${
             scrolled
-              ? "bg-black/70 backdrop-blur-[10px] border-b border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.35)]"
+              ? "bg-black/20 border-b border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
               : "bg-gradient-to-b from-black/60 to-transparent"
           }`}
         >
           <div className="mx-auto max-w-[1600px] px-6 lg:px-16">
-            <div className="flex h-16 md:h-20 lg:h-24 items-center justify-between">
+            <div className="flex h-12 md:h-14 lg:h-16 items-center justify-between">
               {/* Logo */}
-              <Link href="/" className="relative h-10 w-32 md:h-12 md:w-40 flex-shrink-0">
+              <Link href="/" className="relative h-7 w-24 md:h-8 md:w-28 lg:h-9 lg:w-32 flex-shrink-0">
                 <Image
                   src="/logoo.png"
                   alt="Fortune Group"
@@ -109,14 +107,9 @@ export default function Navbar() {
                     key={item.name}
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item)}
-                    className="relative group text-xs uppercase tracking-[0.25em] text-white transition-all duration-300 hover:text-white/70 cursor-pointer"
+                    className="relative group text-xs uppercase tracking-[0.25em] text-white no-underline transition-all duration-300 hover:text-white/70 cursor-pointer"
                   >
                     {item.name}
-                    <span
-                      className={`absolute -bottom-1 left-0 h-px  transition-all duration-300 ${
-                        isActive(item.href) ? "w-full" : "w-0 group-hover:w-full"
-                      }`}
-                    />
                   </a>
                 ))}
               </nav>
@@ -127,7 +120,7 @@ export default function Navbar() {
                 aria-label="Open menu"
                 className="lg:hidden text-white p-2 hover:text-white/70 transition-colors"
               >
-                <Menu size={24} />
+                <Menu size={22} />
               </button>
             </div>
           </div>
@@ -176,13 +169,13 @@ export default function Navbar() {
                     <a
                       href={item.href}
                       onClick={(e) => handleNavClick(e, item)}
-                      className={`group flex items-center justify-between py-4 border-b border-white/[0.06] text-sm uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer ${
-                        isActive(item.href) ? "text-amber-400" : "text-white/70 hover:text-white"
+                      className={`group flex items-center justify-between py-4 text-sm uppercase tracking-[0.2em] no-underline transition-all duration-300 cursor-pointer ${
+                        isActive(item.href) ? "text-white" : "text-white/70 hover:text-white"
                       }`}
                     >
                       {item.name}
                       {isActive(item.href) && (
-                        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0" />
                       )}
                     </a>
                   </motion.div>
