@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { X } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +15,9 @@ const amenities = [
   { title: "Sports Facilities", desc: "Designed for active lifestyles.", image: "/sports.jpeg" },
   { title: "Children's Play Area", desc: "Safe spaces for young explorers.", image: "/kids.jpg" },
   { title: "Community Spaces", desc: "Places that bring people together.", image: "/comm.png" },
+  { title: "Party Hall", desc: "An elegant venue for every celebration.", image: "/partyhall.jpg" },
+  { title: "Skating Rink", desc: "Glide into an active, playful lifestyle.", image: "/skating.jpg" },
+  { title: "Amphitheater", desc: "An open-air stage for shows and gatherings.", image: "/amphi.jpg" },
 ];
 
 function getCardDimensions(width: number): { w: number; h: number } {
@@ -65,6 +69,8 @@ export default function Amenities() {
   const headingRef = useRef<HTMLHeadingElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const totalCards = amenities.length;
+
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const getVisibleMap = useCallback(() => {
     const map = new Map<number, number>();
@@ -256,6 +262,16 @@ export default function Amenities() {
     };
   }, [getVisibleMap, totalCards]);
 
+  // Lock scroll while the popped-out image is open
+  useEffect(() => {
+    document.body.style.overflow = activeIndex !== null ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [activeIndex]);
+
+  const activeItem = activeIndex !== null ? amenities[activeIndex] : null;
+
   return (
     <section id="amenities" ref={sectionRef} className="bg-[#FAF7F0] py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
@@ -271,16 +287,16 @@ export default function Amenities() {
             <span
               className="block font-light italic text-black"
             >
-              Living
+               Life 
             </span>
 
             {/* Line 2 — regular weight, no bold */}
             <span className="block font-normal text-black">
-              <span className="text-amber-400">Space</span>{" "}
+              <span className="text-amber-400">Beyond</span>{" "}
               <span style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif', fontWeight: 300 }}
                 className="text-black/60 text-5xl md:text-6xl lg:text-7xl align-baseline italic"
               >
-                Amenities
+                Home
               </span>
             </span>
           </h2>
@@ -295,6 +311,7 @@ export default function Amenities() {
           {amenities.map((item, index) => (
             <div
               key={item.title}
+              onClick={() => setActiveIndex(index)}
               className="fan-card group absolute cursor-pointer"
               style={{ width: "22rem", height: "28rem" }}
             >
@@ -340,6 +357,68 @@ export default function Amenities() {
         </div>
 
       </div>
+
+      {/* Pop-out image overlay */}
+      {activeItem && (
+        <div
+          onClick={() => setActiveIndex(null)}
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm px-4 animate-[fadeIn_0.3s_ease-out]"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-3xl animate-[popIn_0.35s_cubic-bezier(0.25,0.1,0.25,1)]"
+          >
+            <button
+              onClick={() => setActiveIndex(null)}
+              className="absolute -top-10 right-0 text-white/60 hover:text-white transition-colors"
+            >
+              <X size={22} />
+            </button>
+
+            <div className="relative h-[70vh] w-full overflow-hidden rounded-xl border border-white/10 bg-[#0A0A0A]">
+              <Image
+                src={activeItem.image}
+                alt={activeItem.title}
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/10 to-transparent" />
+
+              <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+                <span
+                  style={{ fontFamily: '"JetBrains Mono", ui-monospace, monospace' }}
+                  className="text-[10px] tracking-[0.3em] text-white/40"
+                >
+                  {String(activeIndex! + 1).padStart(2, "0")} / {String(amenities.length).padStart(2, "0")}
+                </span>
+                <h3
+                  style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
+                  className="mt-3 font-light italic text-3xl sm:text-4xl text-white"
+                >
+                  {activeItem.title}
+                </h3>
+                <p
+                  style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif' }}
+                  className="mt-2 max-w-md text-sm font-light leading-relaxed text-white/60"
+                >
+                  {activeItem.desc}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes popIn {
+          from { opacity: 0; transform: scale(0.92); }
+          to { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
     </section>
   );
 }

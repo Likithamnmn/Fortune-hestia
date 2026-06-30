@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
-import React, { useRef } from "react";
-import { useScroll, useTransform, motion } from "framer-motion";
+import { ArrowRight, X } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useScroll, useTransform, motion, AnimatePresence } from "framer-motion";
 import { Cormorant_Garamond, Inter, JetBrains_Mono } from "next/font/google";
 
 const cormorant = Cormorant_Garamond({
@@ -21,6 +22,18 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["300", "400"],
 });
+
+const autofillReset = `
+  [&:-webkit-autofill]:[-webkit-text-fill-color:rgba(255,255,255,0.9)]
+  [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s]
+  [&:-webkit-autofill]:[box-shadow:0_0_0px_1000px_transparent_inset]
+  [&:-webkit-autofill:hover]:[-webkit-text-fill-color:rgba(255,255,255,0.9)]
+  [&:-webkit-autofill:hover]:[box-shadow:0_0_0px_1000px_transparent_inset]
+  [&:-webkit-autofill:focus]:[-webkit-text-fill-color:rgba(255,255,255,0.9)]
+  [&:-webkit-autofill:focus]:[box-shadow:0_0_0px_1000px_transparent_inset]
+  [&:-webkit-autofill:active]:[-webkit-text-fill-color:rgba(255,255,255,0.9)]
+  [&:-webkit-autofill:active]:[box-shadow:0_0_0px_1000px_transparent_inset]
+`;
 
 // ─── ContainerScroll ──────────────────────────────────────────────────────────
 
@@ -86,25 +99,172 @@ const ContainerScroll = ({
 const villas = [
   {
     title: "40 × 60 Villas",
+    slug: "40x60",
     description:
-      "Spacious homes thoughtfully designed for modern families seeking comfort and elegance.",
+      "Thoughtfully crafted 4 BHK luxury villas with open spaces and everyday comfort.",
     image: "/villa1.jpg",
     num: "01",
   },
   {
     title: "50 × 80 Villas",
+    slug: "50x80",
     description:
-      "Grand residences offering expansive living spaces, private gardens, and premium finishes.",
+      "Spacious luxury villas featuring elegant Greek-inspired architecture and beautifully landscaped surroundings.",
     image: "/villa2.jpg",
     num: "02",
   },
 ];
 
+type Villa = typeof villas[number];
+
+// ─── Enquiry Form Modal ─────────────────────────────────────────────────────────
+
+function EnquiryFormModal({
+  villa,
+  onClose,
+  onSubmit,
+}: {
+  villa: Villa;
+  onClose: () => void;
+  onSubmit: () => void;
+}) {
+  const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    // Replace with a real API/lead-capture call when ready.
+    setTimeout(() => {
+      setSubmitting(false);
+      onSubmit();
+    }, 600);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm px-4"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 30, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 20, scale: 0.97 }}
+        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-md rounded-2xl border border-white/10 bg-[#111111] p-8 md:p-10"
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-5 right-5 text-white/40 hover:text-white transition-colors"
+        >
+          <X size={18} />
+        </button>
+
+        <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-amber-400/70`}>
+          {villa.num} — Floor Plans
+        </span>
+
+        <h3 className={`${cormorant.className} mt-4 font-light italic text-3xl md:text-4xl text-white`}>
+          {villa.title}
+        </h3>
+
+        <p className={`${inter.className} font-light mt-3 text-sm leading-relaxed text-white/45`}>
+          Share a few details and we&apos;ll unlock the full floor plan gallery for this villa.
+        </p>
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          <div>
+            <label className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.3em] text-white/30`}>
+              Full Name
+            </label>
+            <input
+              required
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              className={`${inter.className} mt-2 w-full border-b border-white/15 bg-transparent py-2 text-sm text-white outline-none focus:border-amber-400/60 transition-colors ${autofillReset}`}
+              placeholder="Your name"
+            />
+          </div>
+
+          <div>
+            <label className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.3em] text-white/30`}>
+              Email
+            </label>
+            <input
+              required
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              className={`${inter.className} mt-2 w-full border-b border-white/15 bg-transparent py-2 text-sm text-white outline-none focus:border-amber-400/60 transition-colors ${autofillReset}`}
+              placeholder="you@example.com"
+            />
+          </div>
+
+          <div>
+            <label className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.3em] text-white/30`}>
+              Phone
+            </label>
+            <input
+              required
+              type="tel"
+              name="phone"
+              value={form.phone}
+              onChange={handleChange}
+              className={`${inter.className} mt-2 w-full border-b border-white/15 bg-transparent py-2 text-sm text-white outline-none focus:border-amber-400/60 transition-colors ${autofillReset}`}
+              placeholder="+91 00000 00000"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className={`${jetbrainsMono.className} mt-6 flex w-full items-center justify-center gap-3 bg-amber-400 py-3 text-[9px] uppercase tracking-[0.3em] text-black transition-opacity hover:opacity-90 disabled:opacity-50`}
+          >
+            {submitting ? "Submitting..." : "View Gallery"}
+            {!submitting && (
+              <ArrowRight size={13} />
+            )}
+          </button>
+        </form>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export default function Villas() {
+  const router = useRouter();
+  const [formVilla, setFormVilla] = useState<Villa | null>(null);
+
+  const handleSubmitSuccess = () => {
+    if (formVilla) router.push(`/floor-plans?type=${formVilla.slug}`);
+    setFormVilla(null);
+  };
+
   return (
     <section id="villa-design" className="bg-[#FAF7F0]">
+      <style jsx global>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+
       <ContainerScroll
         titleComponent={
           <motion.div
@@ -135,9 +295,9 @@ export default function Villas() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.4, ease: "easeOut", delay: 0.2 }}
             >
-              Homes Designed
+              Luxury Villas
               <br />
-              <span className="not-italic font-normal text-amber-500">Around Life</span>
+              <span className="not-italic font-normal text-amber-500"> Crafted for Life</span>
             </motion.h2>
           </motion.div>
         }
@@ -181,7 +341,10 @@ export default function Villas() {
                   </p>
 
                   {/* CTA — Mono */}
-                  <button className={`${jetbrainsMono.className} mt-8 flex items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-white/50 group-hover:text-white transition-colors duration-500`}>
+                  <button
+                    onClick={() => setFormVilla(villa)}
+                    className={`${jetbrainsMono.className} mt-8 flex items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-white/50  transition-colors duration-500`}
+                  >
                     View Floor Plans
                     <ArrowRight
                       size={13}
@@ -195,6 +358,17 @@ export default function Villas() {
           </div>
         </div>
       </ContainerScroll>
+
+      {/* Form modal */}
+      <AnimatePresence>
+        {formVilla && (
+          <EnquiryFormModal
+            villa={formVilla}
+            onClose={() => setFormVilla(null)}
+            onSubmit={handleSubmitSuccess}
+          />
+        )}
+      </AnimatePresence>
     </section>
   );
 }

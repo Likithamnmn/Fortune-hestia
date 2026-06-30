@@ -23,25 +23,25 @@ const jetbrainsMono = JetBrains_Mono({
 
 const stories = [
   {
-    title: "Comfort & Style",
+    title: "Contemporary Living",
     description:
-      "Experience the perfect blend of comfort and style. Each home offers premium spacious layouts.",
+      "Experience peaceful surroundings thoughtfully designed for modern family living.",
     image: "/image (5).jpg",
+    overlay: "bg-black/55",
   },
   {
     title: "Natural Light",
-    description: "Modern kitchen designs, and large windows that fill the rooms with natural light. It is an elite space designed to make your daily life feel bright, open, and relaxed.",
+    description:
+      "Thoughtfully designed spaces that welcome daylight, bringing warmth, comfort and openness into every home.",
     image: "/image (4).jpg",
-  },
-  {
-    title: "Quality Materials",
-    description: "See the fine details, clean finishes, and quality materials in every corner.",
-    image: "/image (5).jpg",
+    overlay: "bg-black/55",
   },
   {
     title: "Modern Living",
-    description: "From quiet private bedrooms to elegant dining areas, these homes are built for modern living. Browse the gallery below to see the premium interior quality of our villas.",
-    image: "/image (7).jpg",
+    description:
+      "Thoughtfully designed spaces where families come together, surrounded by comfort, greenery and everyday moments.",
+    image: "/image (5).jpg",
+    overlay: "bg-black/30",
   },
 ];
 
@@ -52,20 +52,20 @@ export default function Experience() {
     target: containerRef,
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-66.666%"]);
 
   return (
     <section
       id="experience"
       ref={containerRef}
-      className="relative h-[250vh] bg-black"
+      className="relative h-[200vh] bg-black"
     >
       <div className="sticky top-0 h-screen overflow-hidden">
-        <motion.div style={{ x }} className="flex h-full w-[400vw]">
+        <motion.div style={{ x }} className="flex h-full w-[300vw]">
           {stories.map((story, index) => (
             <div
               key={index}
-              className="relative flex h-[100vh] w-screen items-center overflow-hidden"
+              className="relative flex h-[80vh] w-screen items-center overflow-hidden"
             >
               {/* IMAGE */}
               <div className="absolute inset-0">
@@ -79,7 +79,7 @@ export default function Experience() {
               </div>
 
               {/* OVERLAY */}
-              <div className="absolute inset-0 bg-black/55" />
+              <div className={`absolute inset-0 ${story.overlay}`} />
 
               {/* CONTENT */}
               <div className="relative z-10 mx-auto max-w-6xl px-8 text-white">

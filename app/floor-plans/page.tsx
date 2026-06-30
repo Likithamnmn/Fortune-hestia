@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import FloorPlansContent from "@/components/sections/FloorPlansContent";
@@ -11,7 +12,9 @@ export default function FloorPlansPage() {
   return (
     <>
       <Navbar />
-      <FloorPlansContent />
+      <Suspense fallback={null}>
+        <FloorPlansContent />
+      </Suspense>
       <Footer />
     </>
   );
