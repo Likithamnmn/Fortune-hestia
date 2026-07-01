@@ -81,11 +81,11 @@ function ParallaxCard({ story, index }: { story: typeof stories[0]; index: numbe
           </span>
         </div>
 
-        <h3 className={`${cormorant.className} font-light italic text-3xl md:text-4xl leading-[0.95] tracking-[-0.04em] text-white`}>
+        <h3 className={`${cormorant.className} font-light italic text-4xl md:text-5xl leading-[0.95] tracking-[-0.04em] text-white`}>
           {story.title}
         </h3>
 
-        <p className={`${inter.className} font-light mt-5 text-base leading-[1.9] text-white/50`}>
+        <p className={`${inter.className} font-light mt-5 text-lg leading-[1.9] text-white/50`}>
           {story.description}
         </p>
       </div>
@@ -126,7 +126,7 @@ export default function GreekArchitecture() {
   }, []);
 
   return (
-    <section id="architecture" ref={sectionRef} className="bg-black py-32">
+    <section id="architecture" ref={sectionRef} className="bg-[#212121] py-32">
       <div className="mx-auto max-w-[1600px] px-6 md:px-8">
 
         {/* Heading */}
@@ -134,12 +134,12 @@ export default function GreekArchitecture() {
           style={{ opacity: headingOpacity, y: headingY, scale: headingScale }}
           className="sticky top-12 z-20 mb-16 md:mb-24 text-center"
         >
-          <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.55em] text-white/30`}>
+          <span className={`${jetbrainsMono.className} text-[10px] uppercase tracking-[0.55em] text-white/30`}>
             Greek Architecture
           </span>
 
-          <h2 className={`${cormorant.className} mt-6 font-light text-[2.8rem] leading-[0.9] tracking-[-0.05em] text-white md:text-[5rem] lg:text-[7rem]`}>
-            <span className="italic text-amber-400">Live the Greek</span>
+          <h2 className={`${cormorant.className} mt-6 font-light text-[3.2rem] leading-[0.9] tracking-[-0.05em] text-white md:text-[5.5rem] lg:text-[7.5rem]`}>
+            <span className="italic text-[#E6F6BA]">Live the Greek</span>
             <br />
             <span className="not-italic font-normal">Life.</span>
           </h2>
@@ -252,7 +252,7 @@ export default function GreekArchitecture() {
             transition={{ duration: 0.6, ease: "easeInOut" }}
             className="h-px bg-white/20"
           />
-          <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-white/30`}>
+          <span className={`${jetbrainsMono.className} text-[10px] uppercase tracking-[0.45em] text-white/30`}>
             {String(index + 1).padStart(2, "0")}
           </span>
         </div>
@@ -261,14 +261,14 @@ export default function GreekArchitecture() {
             exactly once and then holds steady, never re-triggering on unrelated re-renders */}
         <motion.h3
           key={`title-${index}-${isActive}`}
-          initial={{ fontSize: isActive ? "1.5rem" : "1.5rem" }}
-          animate={{ fontSize: isActive ? "1.75rem" : "1.5rem" }}
+          initial={{ fontSize: isActive ? "1.85rem" : "1.85rem" }}
+          animate={{ fontSize: isActive ? "2.15rem" : "1.85rem" }}
           transition={
             isActive
               ? { fontSize: { duration: 1, times: [0, 0.5, 1], ease: [0.25, 0.1, 0.25, 1] } }
               : { duration: 0.4, ease: "easeInOut" }
           }
-          className={`${cormorant.className} mt-4 font-light italic leading-[0.95] tracking-[-0.04em] text-white`}
+          className={`${cormorant.className} mt-4 font-light italic leading-[0.95] tracking-[-0.04em] text-[#E6F6BA]`}
         >
           {story.title}
         </motion.h3>
@@ -276,8 +276,8 @@ export default function GreekArchitecture() {
         {/* Description — same locked, one-shot pulse-and-hold treatment */}
         <motion.p
           key={`desc-${index}-${isActive}`}
-          initial={{ fontSize: "0.8rem" }}
-          animate={{ fontSize: isActive ? "0.95rem" : "0.8rem" }}
+          initial={{ fontSize: "0.95rem" }}
+          animate={{ fontSize: isActive ? "1.1rem" : "0.95rem" }}
           transition={
             isActive
               ? { duration: 1, ease: [0.25, 0.1, 0.25, 1] }

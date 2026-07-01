@@ -161,16 +161,16 @@ export default function FloorPlansContent() {
       {/* Header */}
       <section className="px-6 pt-32 md:pt-40 max-w-6xl mx-auto text-center">
         <div className="flex items-center justify-center gap-3 mb-7">
-          <span className="h-px w-8 bg-amber-400/30" />
+          <span className="h-px w-8 bg-[#E6F6BA]/30" />
           <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.4em] text-white/30`}>
             Fortune Hestia
           </span>
-          <span className="h-px w-8 bg-amber-400/30" />
+          <span className="h-px w-8 bg-[#E6F6BA]/30" />
         </div>
 
         <h1 className={`${cormorant.className} font-light italic text-5xl md:text-7xl lg:text-8xl tracking-[-0.03em] leading-[1.0]`}>
           View{" "}
-          <span className="not-italic font-normal text-amber-400">Floor Plans</span>
+          <span className="not-italic font-normal text-[#E6F6BA]">Floor Plans</span>
         </h1>
 
         <p className={`${inter.className} font-light text-white/40 mt-6 max-w-md mx-auto text-base leading-relaxed`}>
@@ -192,7 +192,7 @@ export default function FloorPlansContent() {
                 }}
                 className={`${jetbrainsMono.className} px-5 py-2.5 rounded-full text-[9px] uppercase tracking-[0.3em] border transition-all duration-400 ${
                   isActive
-                    ? "bg-amber-400 border-amber-400 text-black"
+                    ? "bg-[#E6F6BA] border-[#E6F6BA] text-black"
                     : "border-white/15 text-white/50 hover:text-white hover:border-white/35"
                 }`}
               >

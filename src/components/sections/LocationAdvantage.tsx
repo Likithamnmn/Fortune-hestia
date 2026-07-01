@@ -90,9 +90,9 @@ export default function LocationAdvantage() {
   }, []);
 
   return (
-    <section id="location" ref={sectionRef} className="bg-[#050505] py-40">
+    <section id="location" ref={sectionRef} className="bg-[#212121] py-28 md:py-36 lg:py-40">
       <div className="mx-auto max-w-6xl px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
           {/* LEFT TEXT */}
           <div className="relative">
@@ -110,7 +110,7 @@ export default function LocationAdvantage() {
                   Location
                 </span>
                 <span className="h-px w-6 bg-amber-400/35" />
-                <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-amber-400/50`}>
+                <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-[#E6F6BA]/50`}>
                   Sarjapur Road
                 </span>
               </div>
@@ -124,7 +124,7 @@ export default function LocationAdvantage() {
                   ${visible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
               >
                 Everything Within 
-                <span className="text-amber-400 not-italic font-normal"> Reach</span>
+                <span className="text-[#E6F6BA] not-italic font-normal"> Reach</span>
               </h2>
             </div>
 
@@ -136,7 +136,6 @@ export default function LocationAdvantage() {
                   ${visible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"}`}
               >
                 Thoughtfully located off Sarjapur Road, with seamless access to Bengaluru's IT hubs, schools and daily conveniences.
-* map is perfect but resize this section neately.
               </p>
             </div>
 
@@ -154,7 +153,7 @@ export default function LocationAdvantage() {
           {/* RIGHT MAP */}
           <div
             ref={mapContainer}
-            className={`h-[620px] rounded-2xl overflow-hidden
+            className={`h-[380px] md:h-[480px] lg:h-[560px] rounded-2xl overflow-hidden
               border border-white/5 shadow-[0_0_120px_rgba(255,255,255,0.04)]
               transition-all duration-[1600ms] ease-out
               ${visible ? "opacity-100 scale-100" : "opacity-0 scale-[0.96]"}`}

@@ -14,7 +14,7 @@ const blogs = [
     cardTitle: "FORTUNE HESTIA",
     description:
       "The sound of laughter spilling out of large windows. Cosy family gatherings on the spacious terrace. Homes filled with warmth and light. Welcome to Fortune Hestia, our limited edition villas within the Cosmos enclave.",
-    accent: "from-amber-500/10 to-transparent",
+    accent: "from-amber-5 to-transparent",
     dot: "bg-amber-400",
     blogTitle:
       "The Art of Fine Living: Welcome to the Limited-Edition Villas of Fortune Hestia",
@@ -81,7 +81,7 @@ function BlogModal({ blog, onClose }: { blog: Blog; onClose: () => void }) {
             {/* Close */}
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 backdrop-blur-sm border border-white/10 text-white/60 hover:text-white transition"
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-[#121212]/50 backdrop-blur-sm border border-white/10 text-white/60 hover:text-white transition"
             >
               <X size={14} />
             </button>
@@ -155,7 +155,7 @@ function BlogCard({ blog, onOpen }: { blog: Blog; onOpen: () => void }) {
           fill
           className="object-cover group-hover:scale-110 transition-transform duration-700"
         />
-        <div className="absolute inset-0 bg-black/35 group-hover:bg-black/20 transition" />
+        <div className="absolute inset-0 bg-[#121212]/35 group-hover:bg-black/20 transition" />
 
         {/* Tag pill on image */}
         <div className="absolute top-4 left-4 flex items-center gap-2">
@@ -193,7 +193,7 @@ function BlogCard({ blog, onOpen }: { blog: Blog; onOpen: () => void }) {
         {/* Description — Cormorant italic */}
         <h3
           style={{ fontFamily: fontSerif }}
-          className="font-light italic text-xl leading-snug text-white/90 group-hover:text-amber-300 transition-colors duration-300 tracking-[-0.01em] flex-1"
+          className="font-light italic text-xl leading-snug text-white/90 group-hover:text-[#E6F6BA] transition-colors duration-300 tracking-[-0.01em] flex-1"
         >
           {blog.description}
         </h3>
@@ -202,11 +202,11 @@ function BlogCard({ blog, onOpen }: { blog: Blog; onOpen: () => void }) {
         <div className="mt-6 flex items-center gap-2">
           <span
             style={{ fontFamily: fontMono }}
-            className="text-[9px] uppercase tracking-[0.25em] text-white/20 group-hover:text-amber-400/60 transition-colors duration-300"
+            className="text-[9px] uppercase tracking-[0.25em] text-white/20 group-hover:text-[#E6F6BA] transition-colors duration-300"
           >
             Read Article
           </span>
-          <div className="h-px w-6 bg-white/15 group-hover:w-10 group-hover:bg-amber-400/40 transition-all duration-500" />
+          <div className="h-px w-6 bg-white/15 group-hover:w-10 group-hover:bg-[#E6F6BA]/40 transition-all duration-500" />
         </div>
 
       </div>
@@ -222,7 +222,7 @@ export default function BlogPage() {
   const isHeadingInView = useInView(headingRef, { once: true });
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white px-6 py-32">
+    <main className="min-h-screen bg-[#121212] text-white px-6 py-32">
 
       {/* Eyebrow */}
       <motion.div
@@ -231,14 +231,14 @@ export default function BlogPage() {
         transition={{ duration: 0.6 }}
         className="flex items-center justify-center gap-3 mb-8"
       >
-        <span className="h-px w-8 bg-amber-400/30" />
+        <span className="h-px w-8 bg-[#E6F6BA]" />
         <span
           style={{ fontFamily: fontMono }}
-          className="text-[9px] uppercase tracking-[0.4em] text-white/30"
+          className="text-[9px] uppercase tracking-[0.4em] text-white/60"
         >
           Fortune Hestia
         </span>
-        <span className="h-px w-8 bg-amber-400/30" />
+        <span className="h-px w-8 bg-[#E6F6BA]" />
       </motion.div>
 
       {/* Main Heading */}
@@ -252,7 +252,7 @@ export default function BlogPage() {
           className="font-light italic text-5xl md:text-6xl lg:text-7xl tracking-[-0.03em] leading-[1.05]"
         >
           Our Latest{" "}
-          <span className="not-italic font-normal text-amber-400">
+          <span className="not-italic font-normal text-[#E6F6BA]">
             Insights & News
           </span>
         </motion.h1>

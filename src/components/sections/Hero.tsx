@@ -47,10 +47,10 @@ const fields = [
 function EnquiryForm() {
   return (
     <div id="Hero" className="relative border border-white/12 bg-white/5 backdrop-blur-md p-5 md:p-7 lg:p-10 xl:p-12">
-      <span className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-400/40 to-transparent" />
+      <span className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E6F6BA] to-transparent" />
 
       <div className="mb-5 md:mb-6 lg:mb-8">
-        <p className={`${jetbrainsMono.className} text-[8px] uppercase tracking-[0.5em] text-amber-400/70 mb-2`}>
+        <p className={`${jetbrainsMono.className} text-[8px] uppercase tracking-[0.5em] text-[#E6F6BA] mb-2`}>
           Private Enquiry
         </p>
         <p className={`${cormorant.className} text-lg md:text-2xl lg:text-3xl xl:text-4xl font-light text-white/90 leading-snug`}>
@@ -75,7 +75,7 @@ function EnquiryForm() {
         <div className="pt-3 md:pt-4">
           <button
             type="submit"
-            className={`${jetbrainsMono.className} w-full py-3 md:py-4 border border-white/30 text-white text-[8px] md:text-[9px] tracking-[0.4em] uppercase hover:bg-white hover:text-black transition-all duration-500`}
+            className={`${jetbrainsMono.className} w-full py-3 md:py-4 border border-white/30 text-white text-[8px] md:text-[9px] tracking-[0.4em] uppercase hover:bg-[#E6F6BA] hover:text-black transition-all duration-500`}
           >
             Send Request →
           </button>
@@ -126,16 +126,14 @@ export default function Hero() {
   alt=""
   fill
   priority
-  className="object-cover brightness-165 contrast-95 saturate-120"
+  className="object-cover brightness-95 contrast-95 saturate-120"
 />
           </motion.div>
         ))}
       </div>
 
-      {/* Overlays */}
-      <div className="absolute inset-0 bg-black/50" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-black/60" />
-    
+      {/* Overlay — deep green gradient for real contrast + mood */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#02150C]/75 via-[#04361F]/30 to-[#02150C]/80" />
 
       {/* Content — stacks on mobile, side-by-side from md (768px) up */}
       <div className="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between min-h-screen px-6 md:px-10 lg:px-16 xl:px-20">
@@ -149,11 +147,11 @@ export default function Hero() {
             transition={{ duration: 0.7 }}
             className="flex items-center gap-3 mb-5"
           >
-            <span className={`${jetbrainsMono.className} text-[10px] uppercase tracking-[0.5em] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
+            <span className={`${jetbrainsMono.className} text-sm md:text-base uppercase tracking-[0.5em] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
               Fortune
             </span>
-            <span className="h-px w-6 bg-amber-400" />
-            <span className={`${jetbrainsMono.className} text-[10px] uppercase tracking-[0.5em] text-amber-400 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]`}>
+            <span className="h-px w-6 bg-[#E6F6BA]" />
+            <span className={`${jetbrainsMono.className} text-sm md:text-base uppercase tracking-[0.5em] text-[#E6F6BA] drop-shadow-[0_2px_10px_rgba(0,0,0,0.9)]`}>
               Hestia
             </span>
           </motion.div>

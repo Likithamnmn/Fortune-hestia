@@ -104,7 +104,7 @@ function BrochureModal({ onClose }: { onClose: () => void }) {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 32, scale: 0.97 }}
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 bg-[#FAF7F0] w-full max-w-md p-8 md:p-10"
+        className="relative z-10 bg-[#FCFFEE] w-full max-w-md p-8 md:p-10"
       >
         {/* Close */}
         <button
@@ -181,7 +181,7 @@ export default function About() {
     <>
       <section
         ref={sectionRef}
-        className="relative bg-[#FAF7F0] py-16 lg:py-20 overflow-hidden"
+        className="relative bg-[#FCFFEE] py-16 lg:py-20 overflow-hidden"
       >
         <div className="relative mx-auto max-w-[1300px] px-6 lg:px-10">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_420px_1fr] items-center gap-8 lg:gap-12 xl:gap-16">

@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 const autofillReset = `
   bg-transparent border-b border-white/20 text-white py-1.5 outline-none
-  focus:border-amber-400/60 transition-colors duration-300
+  focus:border-[#E6F6BA]/60 transition-colors duration-300
   [&:-webkit-autofill]:bg-transparent
   [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_transparent]
   [&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s]
@@ -60,7 +60,7 @@ export default function QuickEnquiry() {
   };
 
   return (
-    <section id="quick-enquiry" className="bg-[#FAF7F0] py-12 md:py-14">
+    <section id="quick-enquiry" className="bg-[#FCFFEE] py-12 md:py-14">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#111111] px-8 py-5 md:px-14 md:py-6 shadow-[0_18px_45px_rgba(0,0,0,0.15)]">
           {!submitted ? (
@@ -68,7 +68,7 @@ export default function QuickEnquiry() {
               {/* Left */}
               <div>
                 <span
-                  className={`${jetbrainsMono.className} text-[8px] uppercase tracking-[0.45em] text-amber-400/70`}
+                  className={`${jetbrainsMono.className} text-[8px] uppercase tracking-[0.45em] text-[#E6F6BA]/70`}
                 >
                   Fortune Hestia
                 </span>
@@ -78,7 +78,7 @@ export default function QuickEnquiry() {
                 >
                   Begin your
                   <br />
-                  <span className="not-italic font-normal text-amber-400">
+                  <span className="not-italic font-normal text-[#E6F6BA]">
                     journey home.
                   </span>
                 </h2>
@@ -148,7 +148,7 @@ export default function QuickEnquiry() {
                   <button
                     type="submit"
                     disabled={submitting || !agreed}
-                    className={`${jetbrainsMono.className} whitespace-nowrap rounded-full border border-white/30 px-6 py-2 text-[8px] uppercase tracking-[0.4em] text-white transition-all duration-500 hover:bg-amber-400 hover:border-amber-400 hover:text-black disabled:opacity-40`}
+                    className={`${jetbrainsMono.className} whitespace-nowrap rounded-full border border-white/30 px-6 py-2 text-[8px] uppercase tracking-[0.4em] text-white transition-all duration-500 hover:bg-[#E6F6BA] hover:border-[#E6F6BA] hover:text-black disabled:opacity-40`}
                   >
                     {submitting ? "Sending..." : "Submit"}
                   </button>
@@ -164,7 +164,7 @@ export default function QuickEnquiry() {
                     type="checkbox"
                     checked={agreed}
                     onChange={(e) => setAgreed(e.target.checked)}
-                    className="mt-0.5 h-3 w-3 accent-amber-400"
+                    className="mt-0.5 h-3 w-3 accent-[#E6F6BA]"
                   />
 
                   <span
@@ -178,7 +178,7 @@ export default function QuickEnquiry() {
           ) : (
             <div className="flex flex-col items-center justify-center py-6 text-center">
               <span
-                className={`${jetbrainsMono.className} text-[8px] uppercase tracking-[0.45em] text-amber-400/70`}
+                className={`${jetbrainsMono.className} text-[16px] uppercase tracking-[0.45em] text-[E6F6BA]/100`}
               >
                 Thank You
               </span>

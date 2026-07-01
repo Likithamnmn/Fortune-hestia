@@ -120,7 +120,7 @@ export default function ProjectHighlights() {
 
   return (
     <section id="project-highlights" ref={sectionRef} className="bg-black py-16 md:py-20">
-      <div className="mx-auto max-w-5xl px-6 md:px-10">
+      <div className="mx-auto max-w-[1300px] px-6 lg:px-10">
 
         {/* Eyebrow */}
         <div className="flex items-center justify-center gap-3 mb-4">
@@ -139,7 +139,7 @@ export default function ProjectHighlights() {
   className={`${cormorant.className} text-center font-light italic text-4xl md:text-5xl lg:text-6xl leading-[0.95] tracking-[-0.03em] text-white mb-10`}
   style={{ textShadow: "0 0 20px rgba(255,255,255,0.15)" }}
 >
-  Project <span className="not-italic font-normal text-amber-400">Highlights</span>
+  Project <span className="not-italic font-normal text-[#E6F6BA]">Highlights</span>
 </motion.h2>
 
         {/* Highlights — small boxes, single horizontal row, fade in randomly on scroll */}
@@ -159,20 +159,20 @@ export default function ProjectHighlights() {
                   delay: randomEntries[index].delay,
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
-                className="group flex w-32 shrink-0 flex-col items-center gap-3 border border-white/10 px-3 py-6 text-center transition-colors duration-500 hover:border-amber-400/40 md:w-auto"
+                className="group flex w-32 shrink-0 flex-col items-center gap-3 border border-white/10 px-3 py-6 text-center transition-colors duration-500 hover:border-[#E6F6BA]/40 md:w-auto"
               >
                 <Icon
-                  size={16}
+                  size={20}
                   strokeWidth={1.1}
-                  className="shrink-0 text-amber-400/70 transition-colors duration-500 group-hover:text-amber-400"
+                  className="shrink-0 text-white transition-colors duration-500 group-hover:text-white"
                 />
 
                 <div>
-                  <h3 className={`${cormorant.className} font-light italic text-sm leading-snug text-white`}>
+                  <h3 className={`${cormorant.className} font-light  text-lg leading-snug text-white`}>
                     {title}
                   </h3>
                   {sub && (
-                    <p className={`${inter.className} font-light mt-1 text-[8px] uppercase tracking-[0.2em] text-white/50`}>
+                    <p className={`${inter.className} font-light mt-1 text-[10px] uppercase tracking-[0.2em] text-white/50`}>
                       {sub}
                     </p>
                   )}
@@ -184,7 +184,7 @@ export default function ProjectHighlights() {
 
         {/* Facts — single row, big serif numbers */}
         <div className="overflow-x-auto scrollbar-hide mt-10">
-          <div className="flex items-start gap-10 md:gap-12 min-w-max md:min-w-0 md:justify-between border-t border-white/40 pt-8">
+          <div className="flex items-start gap-10 md:gap-12 min-w-max md:min-w-0 md:justify-between border-t border-white/40 pt-8 italic">
             {facts.map((fact, index) => (
               <FactStat key={index} fact={fact} active={inView} />
             ))}

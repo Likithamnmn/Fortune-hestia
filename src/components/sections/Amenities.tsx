@@ -273,7 +273,7 @@ export default function Amenities() {
   const activeItem = activeIndex !== null ? amenities[activeIndex] : null;
 
   return (
-    <section id="amenities" ref={sectionRef} className="bg-[#FAF7F0] py-32">
+    <section id="amenities" ref={sectionRef} className="bg-[#FCFFEE] py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
 
         {/* Header */}
@@ -292,7 +292,7 @@ export default function Amenities() {
 
             {/* Line 2 — regular weight, no bold */}
             <span className="block font-normal text-black">
-              <span className="text-amber-400">Beyond</span>{" "}
+              <span className="text-[#047C3D]">Beyond</span>{" "}
               <span style={{ fontFamily: '"Inter", ui-sans-serif, system-ui, sans-serif', fontWeight: 300 }}
                 className="text-black/60 text-5xl md:text-6xl lg:text-7xl align-baseline italic"
               >
@@ -338,7 +338,7 @@ export default function Amenities() {
                   {/* Title — Cormorant Garamond */}
                   <h3
                     style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
-                    className="font-light italic text-xl sm:text-2xl leading-snug text-white"
+                    className="font-light italic text-xl sm:text-2xl leading-snug text-[#E6F6BA]"
                   >
                     {item.title}
                   </h3>
@@ -393,7 +393,7 @@ export default function Amenities() {
                 </span>
                 <h3
                   style={{ fontFamily: '"Cormorant Garamond", "Times New Roman", serif' }}
-                  className="mt-3 font-light italic text-3xl sm:text-4xl text-white"
+                  className="mt-3 font-light italic text-3xl sm:text-4xl text-[#E6F6BA] leading-snug"
                 >
                   {activeItem.title}
                 </h3>
