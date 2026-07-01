@@ -168,7 +168,7 @@ function EnquiryFormModal({
           <X size={18} />
         </button>
 
-        <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-amber-400/70`}>
+        <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-[#E6F6BA]/70`}>
           {villa.num} — Floor Plans
         </span>
 
@@ -191,7 +191,7 @@ function EnquiryFormModal({
               name="name"
               value={form.name}
               onChange={handleChange}
-              className={`${inter.className} mt-2 w-full border-b border-white/15 bg-transparent py-2 text-sm text-white outline-none focus:border-amber-400/60 transition-colors ${autofillReset}`}
+              className={`${inter.className} mt-2 w-full border-b border-white/15 bg-transparent py-2 text-sm text-white outline-none focus:border-[#E6F6BA]/60 transition-colors ${autofillReset}`}
               placeholder="Your name"
             />
           </div>
@@ -206,7 +206,7 @@ function EnquiryFormModal({
               name="email"
               value={form.email}
               onChange={handleChange}
-              className={`${inter.className} mt-2 w-full border-b border-white/15 bg-transparent py-2 text-sm text-white outline-none focus:border-amber-400/60 transition-colors ${autofillReset}`}
+              className={`${inter.className} mt-2 w-full border-b border-white/15 bg-transparent py-2 text-sm text-white outline-none focus:border-[#E6F6BA]/60 transition-colors ${autofillReset}`}
               placeholder="you@example.com"
             />
           </div>
@@ -221,7 +221,7 @@ function EnquiryFormModal({
               name="phone"
               value={form.phone}
               onChange={handleChange}
-              className={`${inter.className} mt-2 w-full border-b border-white/15 bg-transparent py-2 text-sm text-white outline-none focus:border-amber-400/60 transition-colors ${autofillReset}`}
+              className={`${inter.className} mt-2 w-full border-b border-white/15 bg-transparent py-2 text-sm text-white outline-none focus:border-[#E6F6BA]/60 transition-colors ${autofillReset}`}
               placeholder="+91 00000 00000"
             />
           </div>
@@ -229,7 +229,7 @@ function EnquiryFormModal({
           <button
             type="submit"
             disabled={submitting}
-            className={`${jetbrainsMono.className} mt-6 flex w-full items-center justify-center gap-3 bg-amber-400 py-3 text-[9px] uppercase tracking-[0.3em] text-black transition-opacity hover:opacity-90 disabled:opacity-50`}
+            className={`${jetbrainsMono.className} mt-6 flex w-full items-center justify-center gap-3 bg-[#E6F6BA] py-3 text-[9px] uppercase tracking-[0.3em] text-black transition-opacity hover:opacity-90 disabled:opacity-50`}
           >
             {submitting ? "Submitting..." : "View Gallery"}
             {!submitting && (
@@ -254,7 +254,7 @@ export default function Villas() {
   };
 
   return (
-    <section id="villa-design" className="bg-[#FAF7F0]">
+    <section id="villa-design" className="bg-[#FCFFEE]">
       <style jsx global>{`
         .scrollbar-hide {
           -ms-overflow-style: none;
@@ -297,7 +297,7 @@ export default function Villas() {
             >
               Luxury Villas
               <br />
-              <span className="not-italic font-normal text-amber-500"> Crafted for Life</span>
+              <span className="not-italic font-normal text-[#047C3D]"> Crafted for Life</span>
             </motion.h2>
           </motion.div>
         }
@@ -308,7 +308,16 @@ export default function Villas() {
             {villas.map((villa) => (
               <div
                 key={villa.title}
-                className="group overflow-hidden rounded-2xl border border-white/10 bg-[#111111] transition-all duration-700 hover:border-white/20"
+                role="button"
+                tabIndex={0}
+                onClick={() => setFormVilla(villa)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setFormVilla(villa);
+                  }
+                }}
+                className="group cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#111111] transition-all duration-700 hover:border-white/20"
               >
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden">
@@ -341,16 +350,15 @@ export default function Villas() {
                   </p>
 
                   {/* CTA — Mono */}
-                  <button
-                    onClick={() => setFormVilla(villa)}
-                    className={`${jetbrainsMono.className} mt-8 flex items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-white/50  transition-colors duration-500`}
+                  <span
+                    className={`${jetbrainsMono.className} mt-8 flex items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-[#E6F6BA] transition-colors duration-500`}
                   >
                     View Floor Plans
                     <ArrowRight
                       size={13}
                       className="transition-transform duration-500 group-hover:translate-x-2"
                     />
-                  </button>
+                  </span>
 
                 </div>
               </div>

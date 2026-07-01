@@ -12,7 +12,7 @@ const quickLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-[#050505] border-t border-white/10 py-20">
+    <footer className="bg-[#212121]  py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-16">
@@ -21,7 +21,7 @@ export default function Footer() {
           <div>
             <h3 className="font-serif text-3xl text-white">
               <Image
-                                src="/logoo.png"
+                                src="/logooo.png"
                                 alt="Fortune Group"
                                 width={160}
                                 height={48}

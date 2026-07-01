@@ -27,21 +27,24 @@ const stories = [
     description:
       "Experience peaceful surroundings thoughtfully designed for modern family living.",
     image: "/image (5).jpg",
-    overlay: "bg-black/55",
+    overlay: "bg-gradient-to-t from-black/70 via-black/20 to-transparent",
+    tint: "bg-[#047C3D]/10",
   },
   {
     title: "Natural Light",
     description:
       "Thoughtfully designed spaces that welcome daylight, bringing warmth, comfort and openness into every home.",
     image: "/image (4).jpg",
-    overlay: "bg-black/55",
+    overlay: "bg-gradient-to-t from-black/70 via-black/20 to-transparent",
+    tint: "bg-[#047C3D]/10",
   },
   {
     title: "Modern Living",
     description:
       "Thoughtfully designed spaces where families come together, surrounded by comfort, greenery and everyday moments.",
     image: "/image (5).jpg",
-    overlay: "bg-black/30",
+    overlay: "bg-gradient-to-t from-black/55 via-black/10 to-transparent",
+    tint: "bg-[#047C3D]/10",
   },
 ];
 
@@ -58,7 +61,7 @@ export default function Experience() {
     <section
       id="experience"
       ref={containerRef}
-      className="relative h-[200vh] bg-black"
+      className="relative h-[200vh] bg-[#212121]"
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <motion.div style={{ x }} className="flex h-full w-[300vw]">
@@ -78,26 +81,15 @@ export default function Experience() {
                 />
               </div>
 
-              {/* OVERLAY */}
+              {/* OVERLAY — gradient for text contrast + a light green tint for mood */}
               <div className={`absolute inset-0 ${story.overlay}`} />
+              <div className={`absolute inset-0 ${story.tint}`} />
 
               {/* CONTENT */}
               <div className="relative z-10 mx-auto max-w-6xl px-8 text-white">
 
                 {/* Label — JetBrains Mono */}
-                <div className="mb-8 flex items-center gap-3">
-                  <span
-                    className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-white/30`}
-                  >
-                    Experience
-                  </span>
-                  <span className="h-px w-8 bg-amber-400/40" />
-                  <span
-                    className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-amber-400/70`}
-                  >
-                    Hestia
-                  </span>
-                </div>
+                
 
                 {/* Slide number — Mono, top right feel anchored to content */}
                 <div className="absolute top-0 right-8 md:right-16">
@@ -139,7 +131,7 @@ export default function Experience() {
                     delay: 0.3,
                   }}
                   viewport={{ once: false, amount: 0.3 }}
-                  className={`${inter.className} mt-5 max-w-md text-base font-light leading-relaxed text-white/55`}
+                  className={`${inter.className} mt-5 max-w-md text-base font-light leading-relaxed text-white/85`}
                 >
                   {story.description}
                 </motion.p>

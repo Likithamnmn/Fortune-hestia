@@ -22,7 +22,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 const autofillReset = `
   bg-transparent border-b border-white/20 text-white py-2.5 outline-none
-  focus:border-amber-400/70 transition-colors duration-300
+  focus:border-[#E6F6BA]/70 transition-colors duration-300
   [&:-webkit-autofill]:bg-transparent
   [&:-webkit-autofill]:shadow-[inset_0_0_0px_1000px_transparent]
   [&:-webkit-autofill]:[transition:background-color_5000s_ease-in-out_0s]
@@ -65,7 +65,7 @@ export default function PrivateTourCTA() {
             priority
           />
           <div className="absolute inset-0 bg-black/35" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/15 to-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/15 to-black/10" />
         </div>
 
         <div
@@ -77,8 +77,8 @@ export default function PrivateTourCTA() {
             <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-white/40`}>
               Fortune Hestia
             </span>
-            <span className="h-px w-5 bg-amber-400/50" />
-            <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-amber-400/70`}>
+            <span className="h-px w-5 bg-[#E6F6BA]/50" />
+            <span className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-[#E6F6BA]/70`}>
               Private Residences
             </span>
           </div>
@@ -88,31 +88,31 @@ export default function PrivateTourCTA() {
             <br />
             <span className="italic text-white/85">Timeless</span>
             <br />
-            <span className="not-italic font-normal text-amber-400">Villa Living</span>
+            <span className="not-italic font-normal text-[#E6F6BA]">Villa Living</span>
           </h2>
 
           <p className={`${inter.className} font-light mt-8 text-white/55 leading-relaxed text-base md:text-lg max-w-[42ch]`}>
             Discover thoughtfully crafted 4 BHK luxury villas off Sarjapur Road, where timeless design, comfort and contemporary living come together.
           </p>
 
-          <div className="mt-10 w-14 h-px bg-amber-400/40" />
+          <div className="mt-10 w-14 h-px bg-[#E6F6BA]/60" />
         </div>
       </div>
 
       {/* RIGHT — solid color panel, full bleed */}
       <div
-        className={`relative flex flex-col justify-center bg-[#10231c] px-10 md:px-16 py-20 md:py-24 transition-all duration-1000 delay-200 ${
+        className={`relative flex flex-col justify-center bg-[#212121] px-10 md:px-16 py-20 md:py-24 transition-all duration-1000 delay-200 ${
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
         }`}
       >
-        <p className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-amber-400/70 mb-6`}>
+        <p className={`${jetbrainsMono.className} text-[9px] uppercase tracking-[0.45em] text-[#E6F6BA]/70 mb-6`}>
           Request a Visit
         </p>
 
         <h3 className={`${cormorant.className} font-normal text-[2.6rem] md:text-[3.4rem] leading-[1.02] text-white mb-3`}>
           Envision <span className="italic text-white/80">your life</span>
           <br />
-          at <span className="text-amber-400">Hestia</span>
+          at <span className="text-[#E6F6BA]">Hestia</span>
         </h3>
 
         <p className={`${inter.className} font-light text-white/45 text-sm mb-12 max-w-[36ch]`}>
@@ -133,10 +133,10 @@ export default function PrivateTourCTA() {
             </div>
           ))}
 
-          <div className="pt-6">
+          <div className="pt-3 flex justify-center">
             <button
               type="submit"
-              className={`${jetbrainsMono.className} group w-full py-4 rounded-full bg-amber-400 text-black text-[9px] tracking-[0.4em] uppercase transition-all duration-500 hover:bg-amber-300 flex items-center justify-center gap-3`}
+              className={`${jetbrainsMono.className} group w-fit px-11 py-4.5  bg-[#E6F6BA] text-black text-[11px] tracking-[0.4em] uppercase transition-all duration-500 hover:bg-[#F5F5F5] flex items-center justify-center gap-3`}
             >
               Send Request
               <span className="transition-transform duration-500 group-hover:translate-x-1">→</span>
