@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef, useCallback, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { X } from "lucide-react";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -71,6 +71,7 @@ export default function Amenities() {
   const totalCards = amenities.length;
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const touchStartX = useRef<number | null>(null);
 
   const getVisibleMap = useCallback(() => {
     const map = new Map<number, number>();
@@ -262,13 +263,47 @@ export default function Amenities() {
     };
   }, [getVisibleMap, totalCards]);
 
-  // Lock scroll while the popped-out image is open
+  const goToNext = useCallback(() => {
+    setActiveIndex((i) => (i === null ? null : (i + 1) % amenities.length));
+  }, []);
+
+  const goToPrevious = useCallback(() => {
+    setActiveIndex((i) =>
+      i === null ? null : (i - 1 + amenities.length) % amenities.length
+    );
+  }, []);
+
+  // Lock scroll while the popped-out image is open, and enable keyboard nav
   useEffect(() => {
     document.body.style.overflow = activeIndex !== null ? "hidden" : "";
+
+    if (activeIndex === null) return;
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveIndex(null);
+      if (e.key === "ArrowRight") goToNext();
+      if (e.key === "ArrowLeft") goToPrevious();
+    };
+    window.addEventListener("keydown", onKeyDown);
+
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKeyDown);
     };
-  }, [activeIndex]);
+  }, [activeIndex, goToNext, goToPrevious]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const SWIPE_THRESHOLD = 50;
+    if (deltaX > SWIPE_THRESHOLD) goToPrevious();
+    else if (deltaX < -SWIPE_THRESHOLD) goToNext();
+    touchStartX.current = null;
+  };
 
   const activeItem = activeIndex !== null ? amenities[activeIndex] : null;
 
@@ -358,7 +393,7 @@ export default function Amenities() {
 
       </div>
 
-      {/* Pop-out image overlay */}
+      {/* Pop-out image overlay with prev/next navigation */}
       {activeItem && (
         <div
           onClick={() => setActiveIndex(null)}
@@ -366,17 +401,39 @@ export default function Amenities() {
         >
           <div
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             className="relative w-full max-w-3xl animate-[popIn_0.35s_cubic-bezier(0.25,0.1,0.25,1)]"
           >
             <button
               onClick={() => setActiveIndex(null)}
               className="absolute -top-10 right-0 text-white/60 hover:text-white transition-colors"
+              aria-label="Close"
             >
               <X size={22} />
             </button>
 
+            {/* Prev arrow */}
+            <button
+              onClick={(e) => { e.stopPropagation(); goToPrevious(); }}
+              className="absolute top-1/2 -left-4 sm:-left-14 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/50 text-white/70 backdrop-blur-sm transition-colors hover:text-white hover:border-white/30"
+              aria-label="Previous amenity"
+            >
+              <ChevronLeft size={20} />
+            </button>
+
+            {/* Next arrow */}
+            <button
+              onClick={(e) => { e.stopPropagation(); goToNext(); }}
+              className="absolute top-1/2 -right-4 sm:-right-14 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-black/50 text-white/70 backdrop-blur-sm transition-colors hover:text-white hover:border-white/30"
+              aria-label="Next amenity"
+            >
+              <ChevronRight size={20} />
+            </button>
+
             <div className="relative h-[70vh] w-full overflow-hidden rounded-xl border border-white/10 bg-[#0A0A0A]">
               <Image
+                key={activeItem.image}
                 src={activeItem.image}
                 alt={activeItem.title}
                 fill
@@ -404,6 +461,20 @@ export default function Amenities() {
                   {activeItem.desc}
                 </p>
               </div>
+            </div>
+
+            {/* Dot indicators */}
+            <div className="mt-4 flex items-center justify-center gap-1.5">
+              {amenities.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={(e) => { e.stopPropagation(); setActiveIndex(i); }}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    i === activeIndex ? "w-5 bg-[#E6F6BA]" : "w-1.5 bg-white/25 hover:bg-white/40"
+                  }`}
+                  aria-label={`Go to ${amenities[i].title}`}
+                />
+              ))}
             </div>
           </div>
         </div>
