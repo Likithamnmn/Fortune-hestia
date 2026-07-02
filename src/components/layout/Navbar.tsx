@@ -92,7 +92,7 @@ export default function Navbar() {
               {/* Logo */}
               <Link href="/" className="relative h-7 w-24 md:h-8 md:w-28 lg:h-9 lg:w-32 flex-shrink-0">
                 <Image
-                  src="/logooo.png"
+                  src="/logo.....svg"
                   alt="Fortune Group"
                   fill
                   priority
