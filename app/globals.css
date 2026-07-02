@@ -5,6 +5,12 @@
   --foreground: #171717;
 }
 
+/* globals.css */
+html, body {
+  overflow-x: clip;
+  max-width: 100%;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

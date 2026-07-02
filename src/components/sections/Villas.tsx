@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowRight, X } from "lucide-react";
+import { ArrowRight, X, ChevronDown } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useScroll, useTransform, motion, AnimatePresence } from "framer-motion";
@@ -247,6 +247,23 @@ function EnquiryFormModal({
 export default function Villas() {
   const router = useRouter();
   const [formVilla, setFormVilla] = useState<Villa | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showScrollHint, setShowScrollHint] = useState(true);
+  const scrollBoxRef = useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth <= 1024);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const handleScroll = () => {
+    const el = scrollBoxRef.current;
+    if (!el) return;
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 16;
+    setShowScrollHint(!atBottom);
+  };
 
   const handleSubmitSuccess = () => {
     if (formVilla) router.push(`/floor-plans?type=${formVilla.slug}`);
@@ -303,67 +320,97 @@ export default function Villas() {
         }
       >
         {/* Villa cards */}
-        <div className="h-full overflow-y-auto scrollbar-hide">
-          <div className="grid gap-6 p-6 lg:grid-cols-2">
-            {villas.map((villa) => (
-              <div
-                key={villa.title}
-                role="button"
-                tabIndex={0}
-                onClick={() => setFormVilla(villa)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setFormVilla(villa);
-                  }
-                }}
-                className="group cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#111111] transition-all duration-700 hover:border-white/20"
-              >
-                {/* Image */}
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src={villa.image}
-                    alt={villa.title}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover transition-transform duration-1000 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-
-                  {/* Index on image — Mono */}
-                  <span className={`${jetbrainsMono.className} absolute top-4 left-4 text-[9px] tracking-[0.3em] text-white/30`}>
-                    {villa.num}
-                  </span>
-                </div>
-
-                {/* Content */}
-                <div className="p-8">
-
-                  {/* Villa title — Cormorant */}
-                  <h3 className={`${cormorant.className} font-light italic text-3xl text-white leading-snug`}>
-                    {villa.title}
-                  </h3>
-
-                  {/* Description — Inter light */}
-                  <p className={`${inter.className} font-light mt-4 text-base leading-relaxed text-white/50`}>
-                    {villa.description}
-                  </p>
-
-                  {/* CTA — Mono */}
-                  <span
-                    className={`${jetbrainsMono.className} mt-8 flex items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-[#E6F6BA] transition-colors duration-500`}
-                  >
-                    View Floor Plans
-                    <ArrowRight
-                      size={13}
-                      className="transition-transform duration-500 group-hover:translate-x-2"
+        <div className="relative h-full">
+          <div
+            ref={scrollBoxRef}
+            onScroll={handleScroll}
+            className="h-full overflow-y-auto scrollbar-hide"
+          >
+            <div className="grid gap-6 p-6 lg:grid-cols-2">
+              {villas.map((villa) => (
+                <div
+                  key={villa.title}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setFormVilla(villa)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      setFormVilla(villa);
+                    }
+                  }}
+                  className="group cursor-pointer overflow-hidden rounded-2xl border border-white/10 bg-[#111111] transition-all duration-700 hover:border-white/20"
+                >
+                  {/* Image */}
+                  <div className="relative h-64 overflow-hidden">
+                    <Image
+                      src={villa.image}
+                      alt={villa.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover transition-transform duration-1000 group-hover:scale-110"
                     />
-                  </span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
 
+                    {/* Index on image — Mono */}
+                    <span className={`${jetbrainsMono.className} absolute top-4 left-4 text-[9px] tracking-[0.3em] text-white/30`}>
+                      {villa.num}
+                    </span>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-8">
+
+                    {/* Villa title — Cormorant */}
+                    <h3 className={`${cormorant.className} font-light italic text-3xl text-white leading-snug`}>
+                      {villa.title}
+                    </h3>
+
+                    {/* Description — Inter light */}
+                    <p className={`${inter.className} font-light mt-4 text-base leading-relaxed text-white/50`}>
+                      {villa.description}
+                    </p>
+
+                    {/* CTA — Mono */}
+                    <span
+                      className={`${jetbrainsMono.className} mt-8 flex items-center gap-3 text-[9px] uppercase tracking-[0.3em] text-[#E6F6BA] transition-colors duration-500`}
+                    >
+                      View Floor Plans
+                      <ArrowRight
+                        size={13}
+                        className="transition-transform duration-500 group-hover:translate-x-2"
+                      />
+                    </span>
+
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+
+          {/* Mobile-only scroll cue: fade + bouncing chevron, hides once scrolled to bottom */}
+          <AnimatePresence>
+            {isMobile && showScrollHint && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="pointer-events-none absolute inset-x-0 bottom-0 flex flex-col items-center justify-end pb-3 pt-10 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent"
+              >
+                <motion.div
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+                  className="flex flex-col items-center gap-1"
+                >
+                  <span className={`${jetbrainsMono.className} text-[8px] uppercase tracking-[0.3em] text-white/50`}>
+                    More Villas
+                  </span>
+                  <ChevronDown size={16} className="text-[#E6F6BA]/70" />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </ContainerScroll>
 

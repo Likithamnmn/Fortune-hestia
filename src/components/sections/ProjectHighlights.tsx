@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Home,
   Maximize2,
@@ -9,6 +9,7 @@ import {
   Cpu,
   ShieldCheck,
   Sparkles,
+  ChevronRight,
 } from "lucide-react";
 import { Cormorant_Garamond, Inter, JetBrains_Mono } from "next/font/google";
 
@@ -70,7 +71,7 @@ function FactStat({ fact, active }: { fact: (typeof facts)[number]; active: bool
   const count = useCountUp(fact.type === "number" ? fact.value : null, active);
 
   return (
-    <div className="flex min-w-[140px] flex-1 flex-col">
+    <div className="flex flex-col">
       <div className="flex items-baseline gap-1">
         <span className={`${cormorant.className} font-light text-white text-3xl md:text-4xl leading-none tracking-[-0.02em]`}>
           {fact.type === "number" ? count : fact.big}
@@ -81,7 +82,7 @@ function FactStat({ fact, active }: { fact: (typeof facts)[number]; active: bool
           </span>
         )}
       </div>
-      <p className={`${inter.className} font-light mt-2 text-[11px] leading-snug text-white/40 whitespace-nowrap`}>
+      <p className={`${inter.className} font-light mt-2 text-[11px] leading-snug text-white/40`}>
         {fact.caption}
       </p>
     </div>
@@ -90,7 +91,10 @@ function FactStat({ fact, active }: { fact: (typeof facts)[number]; active: bool
 
 export default function ProjectHighlights() {
   const sectionRef = useRef<HTMLElement>(null);
+  const scrollRowRef = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showSwipeHint, setShowSwipeHint] = useState(true);
 
   const randomEntries = useMemo(
     () =>
@@ -118,6 +122,20 @@ export default function ProjectHighlights() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const handleRowScroll = () => {
+    const el = scrollRowRef.current;
+    if (!el) return;
+    const atEnd = el.scrollLeft + el.clientWidth >= el.scrollWidth - 16;
+    setShowSwipeHint(!atEnd);
+  };
+
   return (
     <section id="project-highlights" ref={sectionRef} className="bg-black py-16 md:py-20">
       <div className="mx-auto max-w-[1300px] px-6 lg:px-10">
@@ -133,18 +151,22 @@ export default function ProjectHighlights() {
 
         {/* Heading */}
         <motion.h2
-  initial={{ opacity: 0, y: 36 }}
-  animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
-  transition={{ duration: 1.1, ease: [0.25, 0.1, 0.25, 1] }}
-  className={`${cormorant.className} text-center font-light italic text-4xl md:text-5xl lg:text-6xl leading-[0.95] tracking-[-0.03em] text-white mb-10`}
-  style={{ textShadow: "0 0 20px rgba(255,255,255,0.15)" }}
->
-  Project <span className="not-italic font-normal text-[#E6F6BA]">Highlights</span>
-</motion.h2>
+          initial={{ opacity: 0, y: 36 }}
+          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 36 }}
+          transition={{ duration: 1.1, ease: [0.25, 0.1, 0.25, 1] }}
+          className={`${cormorant.className} text-center font-light italic text-4xl md:text-5xl lg:text-6xl leading-[0.95] tracking-[-0.03em] text-white mb-10`}
+          style={{ textShadow: "0 0 20px rgba(255,255,255,0.15)" }}
+        >
+          Project <span className="not-italic font-normal text-[#E6F6BA]">Highlights</span>
+        </motion.h2>
 
-        {/* Highlights — small boxes, single horizontal row, fade in randomly on scroll */}
-        <div className="overflow-x-auto scrollbar-hide">
-          <div className="flex gap-3 min-w-max md:min-w-0 md:grid md:grid-cols-6">
+        {/* Highlights row: horizontal swipe below sm, grid from sm up */}
+        <div className="relative">
+          <div
+            ref={scrollRowRef}
+            onScroll={handleRowScroll}
+            className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide -mx-6 px-6 gap-3 sm:mx-0 sm:px-0 sm:grid sm:grid-cols-3 md:grid-cols-6 sm:overflow-visible"
+          >
             {highlights.map(({ icon: Icon, title, sub }, index) => (
               <motion.div
                 key={index}
@@ -159,7 +181,7 @@ export default function ProjectHighlights() {
                   delay: randomEntries[index].delay,
                   ease: [0.25, 0.1, 0.25, 1],
                 }}
-                className="group flex w-32 shrink-0 flex-col items-center gap-3 border border-white/10 px-3 py-6 text-center transition-colors duration-500 hover:border-[#E6F6BA]/40 md:w-auto"
+                className="group flex w-[42%] shrink-0 snap-start flex-col items-center gap-3 border border-white/10 px-3 py-6 text-center transition-colors duration-500 hover:border-[#E6F6BA]/40 sm:w-full sm:shrink"
               >
                 <Icon
                   size={20}
@@ -168,7 +190,7 @@ export default function ProjectHighlights() {
                 />
 
                 <div>
-                  <h3 className={`${cormorant.className} font-light  text-lg leading-snug text-white`}>
+                  <h3 className={`${cormorant.className} font-light text-lg leading-snug text-white`}>
                     {title}
                   </h3>
                   {sub && (
@@ -180,15 +202,33 @@ export default function ProjectHighlights() {
               </motion.div>
             ))}
           </div>
+
+          {/* Mobile-only swipe cue: fade + bouncing chevron, hides once scrolled to the end */}
+          <AnimatePresence>
+            {isMobile && showSwipeHint && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="pointer-events-none absolute inset-y-0 right-0 flex items-center pl-10 bg-gradient-to-l from-black via-black/70 to-transparent"
+              >
+                <motion.div
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ChevronRight size={18} className="text-[#E6F6BA]/70" />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
-        {/* Facts — single row, big serif numbers */}
-        <div className="overflow-x-auto scrollbar-hide mt-10">
-          <div className="flex items-start gap-10 md:gap-12 min-w-max md:min-w-0 md:justify-between border-t border-white/40 pt-8 italic">
-            {facts.map((fact, index) => (
-              <FactStat key={index} fact={fact} active={inView} />
-            ))}
-          </div>
+        {/* Facts — grid on mobile, single row from md up */}
+        <div className="grid grid-cols-2 gap-y-8 gap-x-6 md:flex md:items-start md:justify-between mt-10 border-t border-white/40 pt-8 italic">
+          {facts.map((fact, index) => (
+            <FactStat key={index} fact={fact} active={inView} />
+          ))}
         </div>
 
       </div>
