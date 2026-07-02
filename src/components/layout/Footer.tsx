@@ -21,7 +21,7 @@ export default function Footer() {
           <div>
             <h3 className="font-serif text-3xl text-white">
               <Image
-                                src="/logooo.png"
+                                src="/charcoal black.svg"
                                 alt="Fortune Group"
                                 width={160}
                                 height={48}

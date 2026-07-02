@@ -150,9 +150,10 @@ export default function LocationAdvantage() {
 
           </div>
 
-          {/* RIGHT MAP */}
+          {/* RIGHT MAP — data-lenis-prevent stops Lenis from hijacking pan/zoom/drag on the map */}
           <div
             ref={mapContainer}
+            data-lenis-prevent
             className={`h-[380px] md:h-[480px] lg:h-[560px] rounded-2xl overflow-hidden
               border border-white/5 shadow-[0_0_120px_rgba(255,255,255,0.04)]
               transition-all duration-[1600ms] ease-out
