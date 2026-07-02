@@ -53,6 +53,7 @@ export default function Experience() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
+    offset: ["start start", "end end"],
   });
 
   const x = useTransform(scrollYProgress, [0, 1], ["0%", "-66.666%"]);
@@ -61,14 +62,14 @@ export default function Experience() {
     <section
       id="experience"
       ref={containerRef}
-      className="relative h-[200vh] bg-[#212121]"
+      className="relative h-[200dvh] bg-[#212121] overflow-x-clip"
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="sticky top-0 h-[100dvh] overflow-hidden">
         <motion.div style={{ x }} className="flex h-full w-[300vw]">
           {stories.map((story, index) => (
             <div
               key={index}
-              className="relative flex h-[80vh] w-screen items-center overflow-hidden"
+              className="relative flex h-[80dvh] w-screen items-center overflow-hidden"
             >
               {/* IMAGE */}
               <div className="absolute inset-0">
@@ -87,9 +88,6 @@ export default function Experience() {
 
               {/* CONTENT */}
               <div className="relative z-10 mx-auto max-w-6xl px-8 text-white">
-
-                {/* Label — JetBrains Mono */}
-                
 
                 {/* Slide number — Mono, top right feel anchored to content */}
                 <div className="absolute top-0 right-8 md:right-16">
