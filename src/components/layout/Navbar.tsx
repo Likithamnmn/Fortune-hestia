@@ -83,7 +83,7 @@ export default function Navbar() {
         <div
           className={`transition-all duration-700 ${
             scrolled
-              ? "bg-black/20 border-b border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
+              ? "bg-[#121212] border-b border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.35)]"
               : "bg-gradient-to-b from-black/60 to-transparent"
           }`}
         >
@@ -92,7 +92,7 @@ export default function Navbar() {
               {/* Logo */}
               <Link href="/" className="relative h-7 w-24 md:h-8 md:w-28 lg:h-9 lg:w-32 flex-shrink-0">
                 <Image
-                  src="/logo.....svg"
+                  src="/charcoal black.svg"
                   alt="Fortune Group"
                   fill
                   priority
